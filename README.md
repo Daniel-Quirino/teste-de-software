@@ -14,7 +14,9 @@
 // TODO
 - ter o node instalado
 - na raiz do projeto rodar 
-      npm start -> Vai rodar a aplicacao
-      npm test -> Vai rodar os testes
+
+ npm start -> Vai rodar a aplicacao
+ 
+ npm test -> Vai rodar os testes
 
 
