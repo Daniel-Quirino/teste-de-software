@@ -1,0 +1,14 @@
+{
+  "name": "todo_manager",
+  "version": "1.0.0",
+  "description": "Simple To-Do Manager with Node.js",
+  "main": "app/todoService.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "start": "node app/todoService.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
