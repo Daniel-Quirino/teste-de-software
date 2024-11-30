@@ -1,7 +1,7 @@
 const readline = require("readline");
-const CustomerService = require("./app/customerService");
-const ProductService = require("./app/productService");
-const InvoiceService = require("./app/invoiceService");
+const CustomerService = require("./customerService");
+const ProductService = require("./productService");
+const InvoiceService = require("./invoiceService");
 
 const customerService = new CustomerService();
 const productService = new ProductService();
