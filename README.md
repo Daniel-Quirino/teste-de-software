@@ -11,5 +11,10 @@
 - GitHub Actions
 
 ## Como Rodar
-1. Clone o repositório.
+// TODO
+- ter o node instalado
+- na raiz do projeto rodar 
+      npm start -> Vai rodar a aplicacao
+      npm test -> Vai rodar os testes
+
 
