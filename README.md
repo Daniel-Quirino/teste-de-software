@@ -18,5 +18,3 @@
  npm start -> Vai rodar a aplicacao
  
  npm test -> Vai rodar os testes
-
-
