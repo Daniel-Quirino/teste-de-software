@@ -38,13 +38,13 @@ class ProductService:
         """
         return self.products
 
-    def find_product_by_id(self, id: int):
+    def find_product_by_id(self, product_id: int):
         """
         Returns the product with the given id if on the list.
         Returns a None object otherwise.
         """
         for product in self.products:
-            if product.id == id:
+            if product.id == product_id:
                 return product
         return None
 

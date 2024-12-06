@@ -38,13 +38,13 @@ class CustomerService:
         """
         return self.customers
 
-    def find_customer_by_id(self, id: int):
+    def find_customer_by_id(self, customer_id: int):
         """
         Returns the customer with the given id if on the list.
         Returns a None object otherwise.
         """
         for customer in self.customers:
-            if customer.id == id:
+            if customer.id == customer_id:
                 return customer
         return None
 
