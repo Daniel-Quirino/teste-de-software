@@ -18,7 +18,7 @@ class ProductService:
         self.products = []
         self.id_counter = 0
 
-    def add_product(self, name: Product, price: float):
+    def add_product(self, name: str, price: float):
         """
         Appens a new product to the list of products.
         """
@@ -48,7 +48,7 @@ class ProductService:
                 return product
         return None
 
-    def update_product(self, product_id, name, price):
+    def update_product(self, product_id: int, name: str, price: float):
         """
         Returns the new product if successfull.
         Returns a None object otherwise.
@@ -63,9 +63,9 @@ class ProductService:
                 return self.products[i]
         return None
 
-    def delete_product(self, product_id):
+    def delete_product(self, product_id: int):
         """
-        Returns the deleted product if successfull.
+        Returns the deleted product if successful.
         Returns a None object otherwise.
         """
         for i in range(len(self.products)):
