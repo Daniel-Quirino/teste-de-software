@@ -4,36 +4,24 @@ on:
   push:
     branches:
       - main
+      - alt
   pull_request:
     branches:
       - main
+      - alt
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout do código do repositório
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Creates and activates venv
+        run: |
+            python3 -m venv ./.venv
+            source ./.venv/bin/activate
 
-      # Configuração do Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Installs dependencies
+        run: pip install -r requirements.txt
 
-      # Instalar dependências
-      - name: Install dependencies
-        run: npm install
-
-      # Rodar testes com cobertura
       - name: Run tests and generate coverage
-        run: npm test
-
-      # Upload do relatório de cobertura
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: coverage/
+        run: pytest --cov=app tests/
