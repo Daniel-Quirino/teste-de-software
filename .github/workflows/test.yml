@@ -3,15 +3,13 @@ name: Run Tests and Coverage
 on:
   push:
     branches:
-      - main
       - alt
   pull_request:
     branches:
-      - main
       - alt
 
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,4 +25,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests and generate coverage
-        run: pytest --cov=app tests/
+        run: pytest --cov=app --cov-report=xml:coverage.xml tests/
+
+      - name: Codecov
+        uses: codecov/codecov-action@v5.1.1
+    
