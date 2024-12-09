@@ -8,12 +8,6 @@ class Customer:
         self.name = name
         self.email = email
 
-    def __str__(self):
-        """
-        Defines how the class will be printed.
-        """
-        return f"{self.name} ({self.email})"
-
 
 class CustomerService:
     """
