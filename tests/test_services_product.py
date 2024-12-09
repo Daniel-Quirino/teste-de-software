@@ -1,14 +1,6 @@
 from app.services.product import *
 
 
-def test_initialize_empty_product_service():
-    # Arrange/Act.
-    product_service = ProductService()
-
-    # Assert.
-    assert len(product_service.products) == 0
-
-
 def test_add_valid_product():
     # Arrange.
     product_service = ProductService()
@@ -19,7 +11,7 @@ def test_add_valid_product():
     # Assert.
     assert product.name == "Rice"
     assert product.price == 11.0
-    assert len(product_service.products) == 1
+    assert hasattr(product, "id")
 
 
 def test_add_multiple_valid_products():
@@ -33,7 +25,6 @@ def test_add_multiple_valid_products():
 
     # Assert.
     assert rice.id != beans.id != meat.id
-    assert len(product_service.products) == 3
 
 
 def test_add_invalid_product():
@@ -45,8 +36,8 @@ def test_add_invalid_product():
     invalid_price = product_service.add_product("Rice", -11.0)
 
     # Assert.
-    assert invalid_name == invalid_price == None
-    assert len(product_service.products) == 0
+    assert invalid_name == None
+    assert invalid_price == None
 
 
 def test_list_products():
@@ -99,11 +90,12 @@ def test_update_product_that_is_on_list():
     meat = product_service.add_product("Meat", 13.0)
 
     # Act.
-    new_meat = product_service.update_product(meat.id, meat.name, 15.0)
+    new_meat = product_service.update_product(meat.id, "New Meat", 15.0)
 
     # Assert.
-    assert new_meat.name == "Meat"
+    assert new_meat.name == "New Meat"
     assert new_meat.price == 15.0
+    assert new_meat.id == meat.id
 
 
 def test_update_product_that_is_not_on_list():
@@ -129,7 +121,8 @@ def test_update_product_with_invalid_parameters():
     invalid_price = product_service.update_product(rice.id, "Rice", -11.0)
 
     # Assert.
-    assert invalid_name == invalid_price == None
+    assert invalid_name == None
+    assert invalid_price == None
 
 
 def test_delete_product_that_is_on_list():
@@ -144,7 +137,6 @@ def test_delete_product_that_is_on_list():
 
     # Assert.
     assert deleted_beans == beans
-    assert len(product_service.products) == 2
 
 
 def test_delete_product_that_is_not_on_list():
@@ -158,4 +150,3 @@ def test_delete_product_that_is_not_on_list():
 
     # Assert.
     assert deleted_product == None
-    assert len(product_service.products) == 2

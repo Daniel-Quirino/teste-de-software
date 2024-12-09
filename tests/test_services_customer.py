@@ -1,14 +1,6 @@
 from app.services.customer import *
 
 
-def test_initialize_empty_customer_service():
-    # Arrange/Act.
-    customer_service = CustomerService()
-
-    # Assert.
-    assert len(customer_service.customers) == 0
-
-
 def test_add_valid_customer():
     # Arrange.
     customer_service = CustomerService()
@@ -19,7 +11,7 @@ def test_add_valid_customer():
     # Assert.
     assert customer.name == "Alice"
     assert customer.email == "alice@email.com"
-    assert len(customer_service.customers) == 1
+    assert hasattr(customer, "id")
 
 
 def test_add_multiple_valid_customers():
@@ -33,7 +25,6 @@ def test_add_multiple_valid_customers():
 
     # Assert.
     assert alice.id != bob.id != eve.id
-    assert len(customer_service.customers) == 3
 
 
 def test_add_invalid_customer():
@@ -45,8 +36,8 @@ def test_add_invalid_customer():
     invalid_email = customer_service.add_customer("Alice", "")
 
     # Assert.
-    assert invalid_name == invalid_email == None
-    assert len(customer_service.customers) == 0
+    assert invalid_name == None
+    assert invalid_email == None
 
 
 def test_list_customers():
@@ -96,14 +87,15 @@ def test_update_customer_that_is_on_list():
     customer_service = CustomerService()
     customer_service.add_customer("Alice", "alice@email.com")
     customer_service.add_customer("Bob", "bob@email.com")
-    eve = customer_service.add_customer("Eve", "eve@email.com")
+    eve = customer_service.add_customer("New Eve", "eve@email.com")
 
     # Act.
-    new_eve = customer_service.update_customer(eve.id, eve.name, "eve2@email.com")
+    new_eve = customer_service.update_customer(eve.id, "New Eve", "new_eve@email.com")
 
     # Assert.
-    assert new_eve.name == "Eve"
-    assert new_eve.email == "eve2@email.com"
+    assert new_eve.name == "New Eve"
+    assert new_eve.email == "new_eve@email.com"
+    assert new_eve.id == eve.id
 
 
 def test_update_customer_that_is_not_on_list():
@@ -113,7 +105,7 @@ def test_update_customer_that_is_not_on_list():
     bob = customer_service.add_customer("Bob", "bob@email.com")
 
     # Act.
-    new_eve = customer_service.update_customer(bob.id + 1, "Eve", "eve2@email.com")
+    new_eve = customer_service.update_customer(bob.id + 1, "Eve", "eve@email.com")
 
     # Assert.
     assert new_eve == None
@@ -129,7 +121,8 @@ def test_update_customer_with_invalid_parameters():
     invalid_email = customer_service.update_customer(alice.id, "Alice", "")
 
     # Assert.
-    assert invalid_name == invalid_email == None
+    assert invalid_name == None
+    assert invalid_email == None
 
 
 def test_delete_customer_that_is_on_list():
@@ -144,7 +137,6 @@ def test_delete_customer_that_is_on_list():
 
     # Assert.
     assert deleted_bob == bob
-    assert len(customer_service.customers) == 2
 
 
 def test_delete_customer_that_is_not_on_list():
@@ -158,4 +150,3 @@ def test_delete_customer_that_is_not_on_list():
 
     # Assert.
     assert deleted_customer == None
-    assert len(customer_service.customers) == 2

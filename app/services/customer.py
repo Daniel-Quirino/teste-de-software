@@ -15,8 +15,8 @@ class CustomerService:
     """
 
     def __init__(self):
-        self.customers = []
-        self.id_counter = 0
+        self._customers = []
+        self._id_counter = 0
 
     def add_customer(self, name: str, email: str):
         """
@@ -26,9 +26,9 @@ class CustomerService:
         if email == "" or name == "":
             return None
 
-        customer = Customer(self.id_counter, name, email)
-        self.customers.append(customer)
-        self.id_counter += 1
+        customer = Customer(self._id_counter, name, email)
+        self._customers.append(customer)
+        self._id_counter += 1
 
         return customer
 
@@ -36,14 +36,14 @@ class CustomerService:
         """
         Returns the stored list of customers.
         """
-        return self.customers
+        return self._customers
 
     def find_customer_by_id(self, customer_id: int):
         """
         Returns the customer with the given id if on the list.
         Returns a None object otherwise.
         """
-        for customer in self.customers:
+        for customer in self._customers:
             if customer.id == customer_id:
                 return customer
         return None
@@ -53,14 +53,14 @@ class CustomerService:
         Returns the new customer if successfull.
         Returns a None object otherwise.
         """
-        for i in range(len(self.customers)):
-            if self.customers[i].id == customer_id:
+        for i in range(len(self._customers)):
+            if self._customers[i].id == customer_id:
                 # Checks if customer parameters are valid.
                 if email == "" or name == "":
                     return None
 
-                self.customers[i] = Customer(customer_id, name, email)
-                return self.customers[i]
+                self._customers[i] = Customer(customer_id, name, email)
+                return self._customers[i]
         return None
 
     def delete_customer(self, customer_id: int):
@@ -68,7 +68,7 @@ class CustomerService:
         Returns the deleted customer if successful.
         Returns a None object otherwise.
         """
-        for i in range(len(self.customers)):
-            if self.customers[i].id == customer_id:
-                return self.customers.pop(i)
+        for i in range(len(self._customers)):
+            if self._customers[i].id == customer_id:
+                return self._customers.pop(i)
         return None

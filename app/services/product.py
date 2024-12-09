@@ -15,8 +15,8 @@ class ProductService:
     """
 
     def __init__(self):
-        self.products = []
-        self.id_counter = 0
+        self._products = []
+        self._id_counter = 0
 
     def add_product(self, name: str, price: float):
         """
@@ -26,9 +26,9 @@ class ProductService:
         if price <= 0 or name == "":
             return None
 
-        product = Product(self.id_counter, name, price)
-        self.products.append(product)
-        self.id_counter += 1
+        product = Product(self._id_counter, name, price)
+        self._products.append(product)
+        self._id_counter += 1
 
         return product
 
@@ -36,14 +36,14 @@ class ProductService:
         """
         Returns the stored list of products.
         """
-        return self.products
+        return self._products
 
     def find_product_by_id(self, product_id: int):
         """
         Returns the product with the given id if on the list.
         Returns a None object otherwise.
         """
-        for product in self.products:
+        for product in self._products:
             if product.id == product_id:
                 return product
         return None
@@ -53,14 +53,14 @@ class ProductService:
         Returns the new product if successfull.
         Returns a None object otherwise.
         """
-        for i in range(len(self.products)):
-            if self.products[i].id == product_id:
+        for i in range(len(self._products)):
+            if self._products[i].id == product_id:
                 # Checks if product parameters are valid.
                 if price <= 0 or name == "":
                     return None
 
-                self.products[i] = Product(product_id, name, price)
-                return self.products[i]
+                self._products[i] = Product(product_id, name, price)
+                return self._products[i]
         return None
 
     def delete_product(self, product_id: int):
@@ -68,7 +68,7 @@ class ProductService:
         Returns the deleted product if successful.
         Returns a None object otherwise.
         """
-        for i in range(len(self.products)):
-            if self.products[i].id == product_id:
-                return self.products.pop(i)
+        for i in range(len(self._products)):
+            if self._products[i].id == product_id:
+                return self._products.pop(i)
         return None
