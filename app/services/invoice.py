@@ -21,9 +21,11 @@ class InvoiceService:
     Class for manipulating invoices.
     """
 
-    def __init__(self):
-        self.product_service = ProductService()
-        self.customer_service = CustomerService()
+    def __init__(
+        self, product_service: ProductService, customer_service: CustomerService
+    ):
+        self.product_service = product_service
+        self.customer_service = customer_service
 
         self.invoices = []
         self.id_counter = 0

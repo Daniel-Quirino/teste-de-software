@@ -1,11 +1,29 @@
+import pytest
 from app.services.invoice import *
 from app.services.product import *
 from app.services.customer import *
 
 
-def test_calculate_total():
+# Arrange.
+@pytest.fixture()
+def product_service():
+    return ProductService()
+
+
+# Arrange.
+@pytest.fixture()
+def customer_service():
+    return CustomerService()
+
+
+# Arrange.
+@pytest.fixture()
+def invoice_service(product_service, customer_service):
+    return InvoiceService(product_service, customer_service)
+
+
+def test_calculate_total(invoice_service):
     # Arrange.
-    invoice_service = InvoiceService()
     products = [Product(0, "Rice", 11.0), Product(1, "Beans", 12.0)]
 
     # Act.
@@ -15,10 +33,7 @@ def test_calculate_total():
     assert total == 23.0
 
 
-def test_calculate_total_empty_list():
-    # Arrange.
-    invoice_service = InvoiceService()
-
+def test_calculate_total_empty_list(invoice_service):
     # Act.
     total = invoice_service._calculate_total([])
 
@@ -26,12 +41,11 @@ def test_calculate_total_empty_list():
     assert total == 0.0
 
 
-def test_create_valid_invoice():
+def test_create_valid_invoice(product_service, customer_service, invoice_service):
     # Arrange.
-    invoice_service = InvoiceService()
-    rice = invoice_service.product_service.add_product("Rice", 11.0)
-    beans = invoice_service.product_service.add_product("Beans", 12.0)
-    alice = invoice_service.customer_service.add_customer("Alice", "alice@email.com")
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
 
     # Act.
     invoice = invoice_service.create_invoice(alice.id, [rice.id, beans.id])
@@ -42,15 +56,16 @@ def test_create_valid_invoice():
     assert len(invoice_service.invoices) == 1
 
 
-def test_create_multiple_valid_invoices():
+def test_create_multiple_valid_invoices(
+    product_service, customer_service, invoice_service
+):
     # Arrange.
-    invoice_service = InvoiceService()
-    rice = invoice_service.product_service.add_product("Rice", 11.0)
-    beans = invoice_service.product_service.add_product("Beans", 12.0)
-    meat = invoice_service.product_service.add_product("Meat", 13.0)
-    alice = invoice_service.customer_service.add_customer("Alice", "alice@email.com")
-    bob = invoice_service.customer_service.add_customer("Bob", "bob@email.com")
-    eve = invoice_service.customer_service.add_customer("Eve", "eve@email.com")
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    meat = product_service.add_product("Meat", 13.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
+    bob = customer_service.add_customer("Bob", "bob@email.com")
+    eve = customer_service.add_customer("Eve", "eve@email.com")
 
     # Act.
     alice_invoice = invoice_service.create_invoice(alice.id, [rice.id, beans.id])
@@ -62,11 +77,10 @@ def test_create_multiple_valid_invoices():
     assert len(invoice_service.invoices) == 3
 
 
-def test_create_invalid_invoice():
+def test_create_invalid_invoice(product_service, customer_service, invoice_service):
     # Arrange.
-    invoice_service = InvoiceService()
-    rice = invoice_service.product_service.add_product("Rice", 11.0)
-    alice = invoice_service.customer_service.add_customer("Alice", "alice@email.com")
+    rice = product_service.add_product("Rice", 11.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
 
     # Act.
     invalid_customer = invoice_service.create_invoice(alice.id + 1, [rice.id])
@@ -77,14 +91,13 @@ def test_create_invalid_invoice():
     assert len(invoice_service.invoices) == 0
 
 
-def test_list_invoices():
+def test_list_invoices(product_service, customer_service, invoice_service):
     # Arrange.
-    invoice_service = InvoiceService()
-    rice = invoice_service.product_service.add_product("Rice", 11.0)
-    beans = invoice_service.product_service.add_product("Beans", 12.0)
-    meat = invoice_service.product_service.add_product("Meat", 13.0)
-    alice = invoice_service.customer_service.add_customer("Alice", "alice@email.com")
-    bob = invoice_service.customer_service.add_customer("Bob", "bob@email.com")
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    meat = product_service.add_product("Meat", 13.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
+    bob = customer_service.add_customer("Bob", "bob@email.com")
     invoice_service.create_invoice(alice.id, [rice.id, beans.id])
     invoice_service.create_invoice(bob.id, [meat.id])
 
@@ -97,11 +110,12 @@ def test_list_invoices():
     assert invoices[1].products == [meat]
 
 
-def test_find_invoice_by_id_that_is_on_list():
+def test_find_invoice_by_id_that_is_on_list(
+    product_service, customer_service, invoice_service
+):
     # Arrange.
-    invoice_service = InvoiceService()
-    rice = invoice_service.product_service.add_product("Rice", 11.0)
-    alice = invoice_service.customer_service.add_customer("Alice", "alice@email.com")
+    rice = product_service.add_product("Rice", 11.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
     invoice = invoice_service.create_invoice(alice.id, [rice.id])
 
     # Act.
@@ -111,11 +125,12 @@ def test_find_invoice_by_id_that_is_on_list():
     assert found_invoice == invoice
 
 
-def test_find_invoice_by_id_that_is_not_on_list():
+def test_find_invoice_by_id_that_is_not_on_list(
+    product_service, customer_service, invoice_service
+):
     # Arrange.
-    invoice_service = InvoiceService()
-    rice = invoice_service.product_service.add_product("Rice", 11.0)
-    alice = invoice_service.customer_service.add_customer("Alice", "alice@email.com")
+    rice = product_service.add_product("Rice", 11.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
     invoice = invoice_service.create_invoice(alice.id, [rice.id])
 
     # Act.
@@ -125,11 +140,12 @@ def test_find_invoice_by_id_that_is_not_on_list():
     assert found_invoice == None
 
 
-def test_delete_invoice_that_is_on_list():
+def test_delete_invoice_that_is_on_list(
+    product_service, customer_service, invoice_service
+):
     # Arrange.
-    invoice_service = InvoiceService()
-    rice = invoice_service.product_service.add_product("Rice", 11.0)
-    alice = invoice_service.customer_service.add_customer("Alice", "alice@email.com")
+    rice = product_service.add_product("Rice", 11.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
     invoice = invoice_service.create_invoice(alice.id, [rice.id])
 
     # Act.
@@ -140,11 +156,12 @@ def test_delete_invoice_that_is_on_list():
     assert len(invoice_service.invoices) == 0
 
 
-def test_delete_invoice_that_is_not_on_list():
+def test_delete_invoice_that_is_not_on_list(
+    product_service, customer_service, invoice_service
+):
     # Arrange.
-    invoice_service = InvoiceService()
-    rice = invoice_service.product_service.add_product("Rice", 11.0)
-    alice = invoice_service.customer_service.add_customer("Alice", "alice@email.com")
+    rice = product_service.add_product("Rice", 11.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
     invoice = invoice_service.create_invoice(alice.id, [rice.id])
 
     # Act.
