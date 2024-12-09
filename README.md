@@ -18,7 +18,7 @@ Em um primeiro momento, foram implementados apenas **testes de unidade**, sob pr
 
 ## Tecnologias
 
-A implementação do back-end foi feita com a linguagem de programação **Python**. Até o momento, não houve a utilização de nenhum serviço externo, como uma **base de dados**. Em termos de **frameworks**, foi utilizado o **pytest** para a escrita, a execução e a geração de relatórios de **coverage** para os testes de unidade. A manipulação dos processos CI/CD que contemplam essa verificação foi feita com base nas pipelines do **GitHub Actions**, com a exportação de resultados para a plataforma **CodeCov**.
+A implementação do back-end foi feita com a linguagem de programação **Python**. O front-end consiste em uma simples interface via linha de comando, também feita nessa linguagem. A comunicação entre os dois é feita de maneira direta via imports e chamadas de função - eles executam como uma aplicação única e monolítica. Até o momento, não houve a utilização de nenhum serviço externo, como uma **base de dados**. Em termos de **frameworks**, foi utilizado o **pytest** para a escrita, a execução e a geração de relatórios de **coverage** para os testes de unidade. A manipulação dos processos CI/CD que contemplam essa verificação foi feita com base nas pipelines do **GitHub Actions**, com a exportação de resultados para a plataforma **CodeCov**.
 
 // TODO
 
