@@ -27,8 +27,8 @@ class InvoiceService:
         self.product_service = product_service
         self.customer_service = customer_service
 
-        self.invoices = []
-        self.id_counter = 0
+        self._invoices = []
+        self._id_counter = 0
 
     def _calculate_total(self, products: list[Product]):
         """
@@ -59,9 +59,9 @@ class InvoiceService:
 
         total = self._calculate_total(products)
 
-        invoice = Invoice(self.id_counter, customer, products, total)
-        self.invoices.append(invoice)
-        self.id_counter += 1
+        invoice = Invoice(self._id_counter, customer, products, total)
+        self._invoices.append(invoice)
+        self._id_counter += 1
 
         return invoice
 
@@ -69,14 +69,14 @@ class InvoiceService:
         """
         Returns the list of stored invoices.
         """
-        return self.invoices
+        return self._invoices
 
     def find_invoice_by_id(self, invoice_id: int):
         """
         Returns the invoice with the given id if on the list.
         Returns a None object otherwise.
         """
-        for invoice in self.invoices:
+        for invoice in self._invoices:
             if invoice.id == invoice_id:
                 return invoice
         return None
@@ -86,7 +86,7 @@ class InvoiceService:
         Returns the deleted invoice if successful.
         Returns a None object otherwise.
         """
-        for i in range(len(self.invoices)):
-            if self.invoices[i].id == invoice_id:
-                return self.invoices.pop(i)
+        for i in range(len(self._invoices)):
+            if self._invoices[i].id == invoice_id:
+                return self._invoices.pop(i)
         return None

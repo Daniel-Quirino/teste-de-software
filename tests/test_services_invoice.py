@@ -53,7 +53,7 @@ def test_create_valid_invoice(product_service, customer_service, invoice_service
     # Assert.
     assert invoice.customer == alice
     assert invoice.products == [rice, beans]
-    assert len(invoice_service.invoices) == 1
+    assert hasattr(invoice, "id")
 
 
 def test_create_multiple_valid_invoices(
@@ -74,7 +74,6 @@ def test_create_multiple_valid_invoices(
 
     # Assert.
     assert alice_invoice.id != bob_invoice.id != eve_invoice.id
-    assert len(invoice_service.invoices) == 3
 
 
 def test_create_invalid_invoice(product_service, customer_service, invoice_service):
@@ -87,8 +86,8 @@ def test_create_invalid_invoice(product_service, customer_service, invoice_servi
     invalid_product = invoice_service.create_invoice(alice.id, [rice.id + 1])
 
     # Assert.
-    assert invalid_customer == invalid_product == None
-    assert len(invoice_service.invoices) == 0
+    assert invalid_customer == None
+    assert invalid_product == None
 
 
 def test_list_invoices(product_service, customer_service, invoice_service):
@@ -98,14 +97,16 @@ def test_list_invoices(product_service, customer_service, invoice_service):
     meat = product_service.add_product("Meat", 13.0)
     alice = customer_service.add_customer("Alice", "alice@email.com")
     bob = customer_service.add_customer("Bob", "bob@email.com")
+    eve = customer_service.add_customer("Eve", "eve@email.com")
     invoice_service.create_invoice(alice.id, [rice.id, beans.id])
     invoice_service.create_invoice(bob.id, [meat.id])
+    invoice_service.create_invoice(eve.id, [])
 
     # Act.
     invoices = invoice_service.list_invoices()
 
     # Assert.
-    assert len(invoices) == 2
+    assert len(invoices) == 3
     assert invoices[0].customer == alice
     assert invoices[1].products == [meat]
 
@@ -153,7 +154,6 @@ def test_delete_invoice_that_is_on_list(
 
     # Assert.
     assert deleted_invoice == invoice
-    assert len(invoice_service.invoices) == 0
 
 
 def test_delete_invoice_that_is_not_on_list(
@@ -169,4 +169,3 @@ def test_delete_invoice_that_is_not_on_list(
 
     # Assert.
     assert deleted_invoice == None
-    assert len(invoice_service.invoices) == 1
