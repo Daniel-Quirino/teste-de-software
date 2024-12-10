@@ -1,3 +1,4 @@
+import pytest
 from app.services.customer import *
 
 
@@ -32,12 +33,14 @@ def test_add_invalid_customer():
     customer_service = CustomerService()
 
     # Act.
-    invalid_name = customer_service.add_customer("", "alice@email.com")
-    invalid_email = customer_service.add_customer("Alice", "")
+    with pytest.raises(Exception) as invalid_name:
+        customer_service.add_customer("", "alice@email.com")
+    with pytest.raises(Exception) as invalid_email:
+        customer_service.add_customer("Alice", "")
 
     # Assert.
-    assert invalid_name == None
-    assert invalid_email == None
+    assert invalid_name.value.args[0] == "Nome e/ou e-mail inválido(s)!"
+    assert invalid_email.value.args[0] == "Nome e/ou e-mail inválido(s)!"
 
 
 def test_list_customers():
@@ -76,10 +79,11 @@ def test_find_customer_by_id_that_is_not_on_list():
     alice = customer_service.add_customer("Alice", "alice@email.com")
 
     # Act.
-    customer = customer_service.find_customer_by_id(alice.id + 1)
+    with pytest.raises(Exception) as inexistent_customer:
+        customer_service.find_customer_by_id(alice.id + 1)
 
     # Assert.
-    assert customer == None
+    assert inexistent_customer.value.args[0] == "Cliente não encontrado!"
 
 
 def test_update_customer_that_is_on_list():
@@ -105,10 +109,11 @@ def test_update_customer_that_is_not_on_list():
     bob = customer_service.add_customer("Bob", "bob@email.com")
 
     # Act.
-    new_eve = customer_service.update_customer(bob.id + 1, "Eve", "eve@email.com")
+    with pytest.raises(Exception) as inexistent_customer:
+        customer_service.update_customer(bob.id + 1, "Eve", "eve@email.com")
 
     # Assert.
-    assert new_eve == None
+    assert inexistent_customer.value.args[0] == "Cliente não encontrado!"
 
 
 def test_update_customer_with_invalid_parameters():
@@ -117,12 +122,14 @@ def test_update_customer_with_invalid_parameters():
     alice = customer_service.add_customer("Alice", "alice@email.com")
 
     # Act.
-    invalid_name = customer_service.update_customer(alice.id, "", "alice@email.com")
-    invalid_email = customer_service.update_customer(alice.id, "Alice", "")
+    with pytest.raises(Exception) as invalid_name:
+        customer_service.update_customer(alice.id, "", "alice@email.com")
+    with pytest.raises(Exception) as invalid_email:
+        customer_service.update_customer(alice.id, "Alice", "")
 
     # Assert.
-    assert invalid_name == None
-    assert invalid_email == None
+    assert invalid_name.value.args[0] == "Nome e/ou e-mail inválido(s)!"
+    assert invalid_email.value.args[0] == "Nome e/ou e-mail inválido(s)!"
 
 
 def test_delete_customer_that_is_on_list():
@@ -146,7 +153,8 @@ def test_delete_customer_that_is_not_on_list():
     bob = customer_service.add_customer("Bob", "bob@email.com")
 
     # Act.
-    deleted_customer = customer_service.delete_customer(bob.id + 1)
+    with pytest.raises(Exception) as inexistent_customer:
+        customer_service.delete_customer(bob.id + 1)
 
     # Assert.
-    assert deleted_customer == None
+    assert inexistent_customer.value.args[0] == "Cliente não encontrado!"

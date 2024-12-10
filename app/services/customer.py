@@ -21,10 +21,12 @@ class CustomerService:
     def add_customer(self, name: str, email: str):
         """
         Appens a new customer to the list of customers.
+
+        Raises Exception() if parameters are invalid.
         """
         # Checks if customer parameters are valid.
         if email == "" or name == "":
-            return None
+            raise Exception("Nome e/ou e-mail inválido(s)!")
 
         customer = Customer(self._id_counter, name, email)
         self._customers.append(customer)
@@ -41,34 +43,37 @@ class CustomerService:
     def find_customer_by_id(self, customer_id: int):
         """
         Returns the customer with the given id if on the list.
-        Returns a None object otherwise.
+
+        Raises Exception() if customer is not found.
         """
         for customer in self._customers:
             if customer.id == customer_id:
                 return customer
-        return None
+        raise Exception("Cliente não encontrado!")
 
     def update_customer(self, customer_id: int, name: str, email: str):
         """
         Returns the new customer if successfull.
-        Returns a None object otherwise.
+
+        Raises Exception() if parameters are invalid or customer is not found.
         """
         for i in range(len(self._customers)):
             if self._customers[i].id == customer_id:
                 # Checks if customer parameters are valid.
                 if email == "" or name == "":
-                    return None
+                    raise Exception("Nome e/ou e-mail inválido(s)!")
 
                 self._customers[i] = Customer(customer_id, name, email)
                 return self._customers[i]
-        return None
+        raise Exception("Cliente não encontrado!")
 
     def delete_customer(self, customer_id: int):
         """
         Returns the deleted customer if successful.
-        Returns a None object otherwise.
+
+        Raises Exception() if customer is not found.
         """
         for i in range(len(self._customers)):
             if self._customers[i].id == customer_id:
                 return self._customers.pop(i)
-        return None
+        raise Exception("Cliente não encontrado!")

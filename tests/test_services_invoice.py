@@ -82,11 +82,12 @@ def test_create_invalid_invoice(product_service, customer_service, invoice_servi
     alice = customer_service.add_customer("Alice", "alice@email.com")
 
     # Act.
-    invalid_customer = invoice_service.create_invoice(alice.id + 1, [rice.id])
+    with pytest.raises(Exception) as invalid_customer:
+        invoice_service.create_invoice(alice.id + 1, [rice.id])
     invalid_product = invoice_service.create_invoice(alice.id, [rice.id + 1])
 
     # Assert.
-    assert invalid_customer == None
+    assert invalid_customer.value.args[0] == "Cliente não encontrado!"
     assert invalid_product == None
 
 

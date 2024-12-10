@@ -3,6 +3,7 @@ from services.invoice import InvoiceService
 from services.product import ProductService
 from services.customer import CustomerService
 
+# Declaring services.
 product_service = ProductService()
 customer_service = CustomerService()
 invoice_service = InvoiceService(product_service, customer_service)
@@ -23,37 +24,42 @@ while True:
     # Matches the chosen action.
     match action:
         case "1":
-            name = input("Nome do cliente: ")
+            name = input("\nNome do cliente: ")
             email = input("E-mail do cliente: ")
-            customer = customer_service.add_customer(name, email)
 
-            print(
-                "Cliente adicionado:",
-                json.dumps(customer, default=lambda o: o.__dict__, skipkeys=True),
-            )
+            try:
+                customer = customer_service.add_customer(name, email)
+                print(
+                    "\nCliente adicionado:",
+                    json.dumps(customer, default=lambda o: o.__dict__, skipkeys=True),
+                )
+            except Exception as e:
+                print("\n" + e.args[0])
 
         case "2":
             customers = customer_service.list_customers()
+            print()
             for customer in customers:
                 print(json.dumps(customer, default=lambda o: o.__dict__, skipkeys=True))
 
         case "3":
-            name = input("Nome do produto: ")
+            name = input("\nNome do produto: ")
             price = float(input("Preço do produto: "))
-            product = product_service.add_product(name, price)
 
+            product = product_service.add_product(name, price)
             print(
-                "Produto adicionado:",
+                "\nProduto adicionado:",
                 json.dumps(product, default=lambda o: o.__dict__, skipkeys=True),
             )
 
         case "4":
             products = product_service.list_products()
+            print()
             for product in products:
                 print(json.dumps(product, default=lambda o: o.__dict__, skipkeys=True))
 
         case "5":
-            customer_id = int(input("ID do cliente: "))
+            customer_id = int(input("\nID do cliente: "))
             product_ids = [
                 int(product_id)
                 for product_id in input(
@@ -61,15 +67,19 @@ while True:
                 ).split(",")
                 if product_id.isnumeric()
             ]
-            invoice = invoice_service.create_invoice(customer_id, product_ids)
 
-            print(
-                "Fatura criada:",
-                json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True),
-            )
+            try:
+                invoice = invoice_service.create_invoice(customer_id, product_ids)
+                print(
+                    "\nFatura criada:",
+                    json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True),
+                )
+            except Exception as e:
+                print("\n" + e.args[0])
 
         case "6":
             invoices = invoice_service.list_invoices()
+            print()
             for invoice in invoices:
                 print(json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True))
 
