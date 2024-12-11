@@ -21,10 +21,12 @@ class ProductService:
     def add_product(self, name: str, price: float):
         """
         Appens a new product to the list of products.
+
+        Raises Exception() if parameters are invalid.
         """
         # Checks if product parameters are valid.
         if price <= 0 or name == "":
-            return None
+            raise Exception("Nome e/ou preço inválido(s)!")
 
         product = Product(self._id_counter, name, price)
         self._products.append(product)
@@ -41,34 +43,37 @@ class ProductService:
     def find_product_by_id(self, product_id: int):
         """
         Returns the product with the given id if on the list.
-        Returns a None object otherwise.
+
+        Raises Exception() if product is not found.
         """
         for product in self._products:
             if product.id == product_id:
                 return product
-        return None
+        raise Exception("Produto não encontrado!")
 
     def update_product(self, product_id: int, name: str, price: float):
         """
         Returns the new product if successfull.
-        Returns a None object otherwise.
+
+        Raises Exception() if parameters are invalid or product is not found.
         """
         for i in range(len(self._products)):
             if self._products[i].id == product_id:
                 # Checks if product parameters are valid.
                 if price <= 0 or name == "":
-                    return None
+                    raise Exception("Nome e/ou preço inválido(s)!")
 
                 self._products[i] = Product(product_id, name, price)
                 return self._products[i]
-        return None
+        raise Exception("Produto não encontrado!")
 
     def delete_product(self, product_id: int):
         """
         Returns the deleted product if successful.
-        Returns a None object otherwise.
+
+        Raises Exception() if product is not found.
         """
         for i in range(len(self._products)):
             if self._products[i].id == product_id:
                 return self._products.pop(i)
-        return None
+        raise Exception("Produto não encontrado!")

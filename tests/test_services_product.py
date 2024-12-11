@@ -1,3 +1,4 @@
+import pytest
 from app.services.product import *
 
 
@@ -32,12 +33,14 @@ def test_add_invalid_product():
     product_service = ProductService()
 
     # Act.
-    invalid_name = product_service.add_product("", 11.0)
-    invalid_price = product_service.add_product("Rice", -11.0)
+    with pytest.raises(Exception) as invalid_name:
+        product_service.add_product("", 11.0)
+    with pytest.raises(Exception) as invalid_price:
+        product_service.add_product("Rice", -11.0)
 
     # Assert.
-    assert invalid_name == None
-    assert invalid_price == None
+    assert invalid_name.value.args[0] == "Nome e/ou preço inválido(s)!"
+    assert invalid_price.value.args[0] == "Nome e/ou preço inválido(s)!"
 
 
 def test_list_products():
@@ -76,10 +79,11 @@ def test_find_product_by_id_that_is_not_on_list():
     rice = product_service.add_product("Rice", 11.0)
 
     # Act.
-    product = product_service.find_product_by_id(rice.id + 1)
+    with pytest.raises(Exception) as inexistent_product:
+        product_service.find_product_by_id(rice.id + 1)
 
     # Assert.
-    assert product == None
+    assert inexistent_product.value.args[0] == "Produto não encontrado!"
 
 
 def test_update_product_that_is_on_list():
@@ -105,10 +109,11 @@ def test_update_product_that_is_not_on_list():
     beans = product_service.add_product("Beans", 12.0)
 
     # Act.
-    new_meat = product_service.update_product(beans.id + 1, "Meat", 15.0)
+    with pytest.raises(Exception) as inexistent_customer:
+        product_service.update_product(beans.id + 1, "Meat", 15.0)
 
     # Assert.
-    assert new_meat == None
+    assert inexistent_customer.value.args[0] == "Produto não encontrado!"
 
 
 def test_update_product_with_invalid_parameters():
@@ -117,12 +122,14 @@ def test_update_product_with_invalid_parameters():
     rice = product_service.add_product("Rice", 11.0)
 
     # Act.
-    invalid_name = product_service.update_product(rice.id, "", 11.0)
-    invalid_price = product_service.update_product(rice.id, "Rice", -11.0)
+    with pytest.raises(Exception) as invalid_name:
+        product_service.update_product(rice.id, "", 11.0)
+    with pytest.raises(Exception) as invalid_price:
+        product_service.update_product(rice.id, "Rice", -11.0)
 
     # Assert.
-    assert invalid_name == None
-    assert invalid_price == None
+    assert invalid_name.value.args[0] == "Nome e/ou preço inválido(s)!"
+    assert invalid_price.value.args[0] == "Nome e/ou preço inválido(s)!"
 
 
 def test_delete_product_that_is_on_list():
@@ -146,7 +153,8 @@ def test_delete_product_that_is_not_on_list():
     beans = product_service.add_product("Beans", 12.0)
 
     # Act.
-    deleted_product = product_service.delete_product(beans.id + 1)
+    with pytest.raises(Exception) as deleted_product:
+        product_service.delete_product(beans.id + 1)
 
     # Assert.
-    assert deleted_product == None
+    assert deleted_product.value.args[0] == "Produto não encontrado!"

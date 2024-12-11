@@ -46,11 +46,14 @@ while True:
             name = input("\nNome do produto: ")
             price = float(input("Preço do produto: "))
 
-            product = product_service.add_product(name, price)
-            print(
-                "\nProduto adicionado:",
-                json.dumps(product, default=lambda o: o.__dict__, skipkeys=True),
-            )
+            try:
+                product = product_service.add_product(name, price)
+                print(
+                    "\nProduto adicionado:",
+                    json.dumps(product, default=lambda o: o.__dict__, skipkeys=True),
+                )
+            except Exception as e:
+                print("\n" + e.args[0])
 
         case "4":
             products = product_service.list_products()

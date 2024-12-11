@@ -84,11 +84,12 @@ def test_create_invalid_invoice(product_service, customer_service, invoice_servi
     # Act.
     with pytest.raises(Exception) as invalid_customer:
         invoice_service.create_invoice(alice.id + 1, [rice.id])
-    invalid_product = invoice_service.create_invoice(alice.id, [rice.id + 1])
+    with pytest.raises(Exception) as invalid_product:
+        invoice_service.create_invoice(alice.id, [rice.id + 1])
 
     # Assert.
     assert invalid_customer.value.args[0] == "Cliente não encontrado!"
-    assert invalid_product == None
+    assert invalid_product.value.args[0] == "Produto não encontrado!"
 
 
 def test_list_invoices(product_service, customer_service, invoice_service):
