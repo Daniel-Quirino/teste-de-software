@@ -18,6 +18,8 @@ Em um primeiro momento, foram implementados apenas **testes de unidade**, sob pr
 
 A implementação do back-end foi feita com a linguagem de programação **Python**. O front-end consiste em uma simples interface via linha de comando, também feita nessa linguagem. A comunicação entre os dois é feita de maneira direta via imports e chamadas de função - eles executam como uma aplicação única e monolítica. Até o momento, não houve a utilização de nenhum serviço externo, como uma **base de dados**. Em termos de **frameworks**, foi utilizado o **pytest** para a escrita, a execução e a geração de relatórios de **coverage** para os testes de unidade. A manipulação dos processos CI/CD que contemplam essa verificação foi feita com base nas pipelines do **GitHub Actions**, com a exportação de resultados para a plataforma **CodeCov**.
 
+Um detalhe importante é que os testes de unidade avaliam apenas os módulos na pasta ```app/services```. O conteúdo do arquivo ```app/main.py```, o qual consiste apenas na implementação da interface de usuário em linha de comando, **não é testado pelos testes de unidade e não é considerado no relatório de cobertura**.
+
 ## Instruções de Build e de Execução (Linux)
 
 Na raiz do projeto, primeiramente, deve-se criar um ambiente virtual Python por meio do comando:
