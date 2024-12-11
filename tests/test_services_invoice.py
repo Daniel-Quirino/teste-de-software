@@ -137,10 +137,11 @@ def test_find_invoice_by_id_that_is_not_on_list(
     invoice = invoice_service.create_invoice(alice.id, [rice.id])
 
     # Act.
-    found_invoice = invoice_service.find_invoice_by_id(invoice.id + 1)
+    with pytest.raises(Exception) as inexistent_invoice:
+        invoice_service.find_invoice_by_id(invoice.id + 1)
 
     # Assert.
-    assert found_invoice == None
+    assert inexistent_invoice.value.args[0] == "Fatura não encontrada!"
 
 
 def test_delete_invoice_that_is_on_list(
@@ -167,7 +168,8 @@ def test_delete_invoice_that_is_not_on_list(
     invoice = invoice_service.create_invoice(alice.id, [rice.id])
 
     # Act.
-    deleted_invoice = invoice_service.delete_invoice(invoice.id + 1)
+    with pytest.raises(Exception) as inexistent_invoice:
+        invoice_service.delete_invoice(invoice.id + 1)
 
     # Assert.
-    assert deleted_invoice == None
+    assert inexistent_invoice.value.args[0] == "Fatura não encontrada!"

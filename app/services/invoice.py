@@ -46,16 +46,11 @@ class InvoiceService:
         calculates the total cost and saves as an invoice.
         """
         customer = self.customer_service.find_customer_by_id(customer_id)
-        if not customer:  # Returns None if customer not found.
-            return None
 
         products = []
         for product_id in product_ids:
             product = self.product_service.find_product_by_id(product_id)
-            if not product:  # Returns None if product not found.
-                return None
-            else:
-                products.append(product)
+            products.append(product)
 
         total = self._calculate_total(products)
 
@@ -74,19 +69,21 @@ class InvoiceService:
     def find_invoice_by_id(self, invoice_id: int):
         """
         Returns the invoice with the given id if on the list.
-        Returns a None object otherwise.
+
+        Raises Exception() if invoice is not found.
         """
         for invoice in self._invoices:
             if invoice.id == invoice_id:
                 return invoice
-        return None
+        raise Exception("Fatura não encontrada!")
 
     def delete_invoice(self, invoice_id: int):
         """
         Returns the deleted invoice if successful.
-        Returns a None object otherwise.
+
+        Raises Exception() if invoice is not found.
         """
         for i in range(len(self._invoices)):
             if self._invoices[i].id == invoice_id:
                 return self._invoices.pop(i)
-        return None
+        raise Exception("Fatura não encontrada!")

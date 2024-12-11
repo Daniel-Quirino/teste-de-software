@@ -109,11 +109,11 @@ def test_update_product_that_is_not_on_list():
     beans = product_service.add_product("Beans", 12.0)
 
     # Act.
-    with pytest.raises(Exception) as inexistent_customer:
+    with pytest.raises(Exception) as inexistent_product:
         product_service.update_product(beans.id + 1, "Meat", 15.0)
 
     # Assert.
-    assert inexistent_customer.value.args[0] == "Produto não encontrado!"
+    assert inexistent_product.value.args[0] == "Produto não encontrado!"
 
 
 def test_update_product_with_invalid_parameters():
@@ -153,8 +153,8 @@ def test_delete_product_that_is_not_on_list():
     beans = product_service.add_product("Beans", 12.0)
 
     # Act.
-    with pytest.raises(Exception) as deleted_product:
+    with pytest.raises(Exception) as inexistent_product:
         product_service.delete_product(beans.id + 1)
 
     # Assert.
-    assert deleted_product.value.args[0] == "Produto não encontrado!"
+    assert inexistent_product.value.args[0] == "Produto não encontrado!"
