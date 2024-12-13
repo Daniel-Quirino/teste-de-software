@@ -54,6 +54,8 @@ def test_create_valid_invoice(product_service, customer_service, invoice_service
     assert invoice.customer == alice
     assert invoice.products == [rice, beans]
     assert hasattr(invoice, "id")
+    assert hasattr(invoice, "total")
+    assert hasattr(invoice, "date")
 
 
 def test_create_multiple_valid_invoices(

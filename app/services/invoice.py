@@ -1,5 +1,6 @@
 from .product import *
 from .customer import *
+from datetime import datetime
 
 
 class Invoice:
@@ -14,6 +15,7 @@ class Invoice:
         self.customer = customer
         self.products = products
         self.total = total
+        self.date = datetime.now()
 
 
 class InvoiceService:
