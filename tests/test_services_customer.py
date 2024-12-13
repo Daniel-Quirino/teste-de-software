@@ -116,6 +116,36 @@ def test_find_customer_by_name_that_does_not_match():
     assert result == []
 
 
+def test_find_customer_by_email_that_matches():
+    # Arrange.
+    customer_service = CustomerService()
+    alice = customer_service.add_customer("Alice", "alice@gmail.com")
+    bob = customer_service.add_customer("Bob", "bob@gmail.com")
+    eve = customer_service.add_customer("Eve", "eve@hotmail.com")
+
+    # Act.
+    result_single = customer_service.find_customer_by_email("hotmail")
+    result_multiple = customer_service.find_customer_by_email("gmail")
+
+    # Assert.
+    assert result_single == [eve]
+    assert result_multiple == [alice, bob]
+
+
+def test_find_customer_by_email_that_does_not_match():
+    # Arrange.
+    customer_service = CustomerService()
+    customer_service.add_customer("Alice", "alice@gmail.com")
+    customer_service.add_customer("Bob", "bob@gmail.com")
+    customer_service.add_customer("Eve", "eve@hotmail.com")
+
+    # Act.
+    result = customer_service.find_customer_by_email("yahoo")
+
+    # Assert.
+    assert result == []
+
+
 def test_update_customer_that_is_on_list():
     # Arrange.
     customer_service = CustomerService()

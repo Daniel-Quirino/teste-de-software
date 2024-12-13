@@ -9,13 +9,18 @@ class Invoice:
     """
 
     def __init__(
-        self, id: int, customer: Customer, products: list[Product], total: float
+        self,
+        id: int,
+        customer: Customer,
+        products: list[Product],
+        total: float,
+        date: str,
     ):
         self.id = id
         self.customer = customer
         self.products = products
         self.total = total
-        self.date = datetime.now()
+        self.date = date
 
 
 class InvoiceService:
@@ -31,6 +36,28 @@ class InvoiceService:
 
         self._invoices = []
         self._id_counter = 0
+        """ self._base_id = -1
+
+        # Reads persisted data.
+        file = open("./app/data/invoices.jsonl", "r")
+        for line in file:
+            invoice = Invoice(**json.loads(line))
+            self._invoices.append(invoice)
+            if invoice.id > self._base_id:
+                self._base_id = invoice.id
+                self._id_counter = self._base_id + 1
+        file.close()
+
+    def __del__(self):
+        # Persists the data.
+        file = open("./app/data/invoices.jsonl", "a")
+        for invoice in self._invoices:
+            if invoice.id > self._base_id:
+                file.write(
+                    json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True)
+                    + "\n"
+                )
+        file.close() """
 
     def _calculate_total(self, products: list[Product]):
         """
@@ -56,7 +83,9 @@ class InvoiceService:
 
         total = self._calculate_total(products)
 
-        invoice = Invoice(self._id_counter, customer, products, total)
+        date = str(datetime.now())
+
+        invoice = Invoice(self._id_counter, customer, products, total, date)
         self._invoices.append(invoice)
         self._id_counter += 1
 

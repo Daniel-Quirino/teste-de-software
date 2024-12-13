@@ -1,3 +1,6 @@
+import json
+
+
 class Customer:
     """
     Defines a customer.
@@ -17,6 +20,28 @@ class CustomerService:
     def __init__(self):
         self._customers = []
         self._id_counter = 0
+        """ self._base_id = -1
+
+        # Reads persisted data.
+        file = open("./app/data/customers.jsonl", "r")
+        for line in file:
+            customer = Customer(**json.loads(line))
+            self._customers.append(customer)
+            if customer.id > self._base_id:
+                self._base_id = customer.id
+                self._id_counter = self._base_id + 1
+        file.close()
+
+    def __del__(self):
+        # Persists the data.
+        file = open("./app/data/customers.jsonl", "a")
+        for customer in self._customers:
+            if customer.id > self._base_id:
+                file.write(
+                    json.dumps(customer, default=lambda o: o.__dict__, skipkeys=True)
+                    + "\n"
+                )
+        file.close() """
 
     def add_customer(self, name: str, email: str):
         """
@@ -60,6 +85,18 @@ class CustomerService:
         results = []
         for customer in self._customers:
             if search_string.lower() in customer.name.lower():
+                results.append(customer)
+        return results
+
+    def find_customer_by_email(self, search_string: str):
+        """
+        Receive a 'search string' and returns customers whose e-mails match it.
+
+        Returns an empty list if there are no matches.
+        """
+        results = []
+        for customer in self._customers:
+            if search_string.lower() in customer.email.lower():
                 results.append(customer)
         return results
 

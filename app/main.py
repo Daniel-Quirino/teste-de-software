@@ -123,6 +123,18 @@ def client_menu():
                     )
                 input("\nPressione ENTER para continuar...")
 
+            case "7":
+                search_string = input("\nEntrada: ")
+                results = customer_service.find_customer_by_email(search_string)
+                print("\n=== Resultados ===")
+                for customer in results:
+                    print(
+                        json.dumps(
+                            customer, default=lambda o: o.__dict__, skipkeys=True
+                        )
+                    )
+                input("\nPressione ENTER para continuar...")
+
             case "0":
                 break
 
@@ -301,3 +313,8 @@ while True:
 
         case "0":
             break
+
+# Cleanup.
+invoice_service = None
+customer_service = None
+product_service = None

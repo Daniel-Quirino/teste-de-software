@@ -1,3 +1,6 @@
+import json
+
+
 class Product:
     """
     Defines a product.
@@ -17,6 +20,28 @@ class ProductService:
     def __init__(self):
         self._products = []
         self._id_counter = 0
+        """ self._base_id = -1
+
+        # Reads persisted data.
+        file = open("./app/data/products.jsonl", "r")
+        for line in file:
+            product = Product(**json.loads(line))
+            self._products.append(product)
+            if product.id > self._base_id:
+                self._base_id = product.id
+                self._id_counter = self._base_id + 1
+        file.close()
+
+    def __del__(self):
+        # Persists the data.
+        file = open("./app/data/products.jsonl", "a")
+        for product in self._products:
+            if product.id > self._base_id:
+                file.write(
+                    json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
+                    + "\n"
+                )
+        file.close() """
 
     def add_product(self, name: str, price: float):
         """
