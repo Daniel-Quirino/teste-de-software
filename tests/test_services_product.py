@@ -86,6 +86,36 @@ def test_find_product_by_id_that_is_not_on_list():
     assert inexistent_product.value.args[0] == "Produto não encontrado!"
 
 
+def test_find_product_by_name_that_matches():
+    # Arrange.
+    product_service = ProductService()
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    meat = product_service.add_product("Meat", 13.0)
+
+    # Act.
+    result_single = product_service.find_product_by_name("Rice")
+    result_multiple = product_service.find_product_by_name("a")
+
+    # Assert.
+    assert result_single == [rice]
+    assert result_multiple == [beans, meat]
+
+
+def test_find_product_by_name_that_does_not_match():
+    # Arrange.
+    product_service = ProductService()
+    product_service.add_product("Rice", 11.0)
+    product_service.add_product("Beans", 12.0)
+    product_service.add_product("Meat", 13.0)
+
+    # Act.
+    result = product_service.find_product_by_name("Lettuce")
+
+    # Assert.
+    assert result == []
+
+
 def test_update_product_that_is_on_list():
     # Arrange.
     product_service = ProductService()

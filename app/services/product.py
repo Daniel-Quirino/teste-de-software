@@ -76,6 +76,18 @@ class ProductService:
                 return product
         raise Exception("Produto não encontrado!")
 
+    def find_product_by_name(self, search_string: str):
+        """
+        Receive a 'search string' and returns products whose names match it.
+
+        Returns an empty list if there are no matches.
+        """
+        results = []
+        for product in self._products:
+            if search_string.lower() in product.name.lower():
+                results.append(product)
+        return results
+
     def update_product(self, product_id: int, name: str, price: float):
         """
         Returns the new product if successfull.
