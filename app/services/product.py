@@ -20,9 +20,12 @@ class ProductService:
     def __init__(self):
         self._products = []
         self._id_counter = 0
-        """ self._base_id = -1
+        self._base_id = -1
 
-        # Reads persisted data.
+    def load_persisted(self):
+        """
+        Reads persisted data.
+        """
         file = open("./app/data/products.jsonl", "r")
         for line in file:
             product = Product(**json.loads(line))
@@ -32,8 +35,10 @@ class ProductService:
                 self._id_counter = self._base_id + 1
         file.close()
 
-    def __del__(self):
-        # Persists the data.
+    def persist(self):
+        """
+        Persists the data.
+        """
         file = open("./app/data/products.jsonl", "a")
         for product in self._products:
             if product.id > self._base_id:
@@ -41,7 +46,7 @@ class ProductService:
                     json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
                     + "\n"
                 )
-        file.close() """
+        file.close()
 
     def add_product(self, name: str, price: float):
         """

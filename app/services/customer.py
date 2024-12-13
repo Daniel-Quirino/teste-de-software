@@ -20,9 +20,12 @@ class CustomerService:
     def __init__(self):
         self._customers = []
         self._id_counter = 0
-        """ self._base_id = -1
+        self._base_id = -1
 
-        # Reads persisted data.
+    def load_persisted(self):
+        """
+        Reads persisted data.
+        """
         file = open("./app/data/customers.jsonl", "r")
         for line in file:
             customer = Customer(**json.loads(line))
@@ -32,8 +35,10 @@ class CustomerService:
                 self._id_counter = self._base_id + 1
         file.close()
 
-    def __del__(self):
-        # Persists the data.
+    def persist(self):
+        """
+        Persists the data.
+        """
         file = open("./app/data/customers.jsonl", "a")
         for customer in self._customers:
             if customer.id > self._base_id:
@@ -41,7 +46,7 @@ class CustomerService:
                     json.dumps(customer, default=lambda o: o.__dict__, skipkeys=True)
                     + "\n"
                 )
-        file.close() """
+        file.close()
 
     def add_customer(self, name: str, email: str):
         """

@@ -9,6 +9,11 @@ product_service = ProductService()
 customer_service = CustomerService()
 invoice_service = InvoiceService(product_service, customer_service)
 
+# Loading persisted data.
+product_service.load_persisted()
+customer_service.load_persisted()
+invoice_service.load_persisted()
+
 
 # Declaring menus.
 def client_menu():
@@ -228,7 +233,7 @@ def product_menu():
                     print(
                         "\nProduto encontrado:",
                         json.dumps(
-                            customer, default=lambda o: o.__dict__, skipkeys=True
+                            product, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
 
@@ -357,7 +362,7 @@ while True:
         case "0":
             break
 
-""" # Cleanup.
-invoice_service = None
-customer_service = None
-product_service = None """
+# Updates persisted data.
+invoice_service.persist()
+customer_service.persist()
+product_service.persist()

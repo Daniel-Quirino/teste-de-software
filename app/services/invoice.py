@@ -36,9 +36,12 @@ class InvoiceService:
 
         self._invoices = []
         self._id_counter = 0
-        """ self._base_id = -1
+        self._base_id = -1
 
-        # Reads persisted data.
+    def load_persisted(self):
+        """
+        Reads persisted data.
+        """
         file = open("./app/data/invoices.jsonl", "r")
         for line in file:
             invoice = Invoice(**json.loads(line))
@@ -48,8 +51,10 @@ class InvoiceService:
                 self._id_counter = self._base_id + 1
         file.close()
 
-    def __del__(self):
-        # Persists the data.
+    def persist(self):
+        """
+        Persists the data.
+        """
         file = open("./app/data/invoices.jsonl", "a")
         for invoice in self._invoices:
             if invoice.id > self._base_id:
@@ -57,7 +62,7 @@ class InvoiceService:
                     json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True)
                     + "\n"
                 )
-        file.close() """
+        file.close()
 
     def _calculate_total(self, products: list[Product]):
         """
