@@ -88,6 +88,18 @@ class ProductService:
                 results.append(product)
         return results
 
+    def find_product_by_price(self, lower_bound: float, upper_bound: float):
+        """
+        Receives lower and upper bounds and returns all products whose prices fall in between (inclusive on both ends).
+
+        Returns an empty list if there are no matches.
+        """
+        results = []
+        for product in self._products:
+            if lower_bound <= product.price and product.price <= upper_bound:
+                results.append(product)
+        return results
+
     def update_product(self, product_id: int, name: str, price: float):
         """
         Returns the new product if successfull.

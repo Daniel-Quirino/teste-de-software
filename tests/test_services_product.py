@@ -116,6 +116,36 @@ def test_find_product_by_name_that_does_not_match():
     assert result == []
 
 
+def test_find_product_by_price_that_matches():
+    # Arrange.
+    product_service = ProductService()
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    meat = product_service.add_product("Meat", 13.0)
+
+    # Act.
+    result_single = product_service.find_product_by_price(11.0, 11.0)
+    result_multiple = product_service.find_product_by_price(9.0, 15.0)
+
+    # Assert.
+    assert result_single == [rice]
+    assert result_multiple == [rice, beans, meat]
+
+
+def test_find_product_by_price_that_does_not_match():
+    # Arrange.
+    product_service = ProductService()
+    product_service.add_product("Rice", 11.0)
+    product_service.add_product("Beans", 12.0)
+    product_service.add_product("Meat", 13.0)
+
+    # Act.
+    result = product_service.find_product_by_price(15.0, 23.0)
+
+    # Assert.
+    assert result == []
+
+
 def test_update_product_that_is_on_list():
     # Arrange.
     product_service = ProductService()

@@ -150,6 +150,9 @@ def product_menu():
         print("2. Remover")
         print("3. Atualizar")
         print("4. Listar")
+        print("5. Buscar por ID")
+        print("6. Buscar por nome")
+        print("7. Buscar por preço")
         print("0. Voltar")
 
         action = input("Escolha uma opção: ")
@@ -212,6 +215,46 @@ def product_menu():
                 products = product_service.list_products()
                 print("\n=== Produtos ===")
                 for product in products:
+                    print(
+                        json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
+                    )
+                input("\nPressione ENTER para continuar...")
+
+            case "5":
+                id = int(input("\nID do produto: "))
+
+                try:
+                    product = product_service.find_product_by_id(id)
+                    print(
+                        "\nProduto encontrado:",
+                        json.dumps(
+                            customer, default=lambda o: o.__dict__, skipkeys=True
+                        ),
+                    )
+
+                except Exception as e:
+                    print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
+
+            case "6":
+                search_string = input("\nEntrada: ")
+                results = product_service.find_product_by_name(search_string)
+                print("\n=== Resultados ===")
+                for product in results:
+                    print(
+                        json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
+                    )
+                input("\nPressione ENTER para continuar...")
+
+            case "7":
+                lower_bound = float(input("\nLimite inferior: "))
+                upper_bound = float(input("Limite superior: "))
+                results = product_service.find_product_by_price(
+                    lower_bound, upper_bound
+                )
+                print("\n=== Resultados ===")
+                for product in results:
                     print(
                         json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
                     )
@@ -314,7 +357,7 @@ while True:
         case "0":
             break
 
-# Cleanup.
+""" # Cleanup.
 invoice_service = None
 customer_service = None
-product_service = None
+product_service = None """
