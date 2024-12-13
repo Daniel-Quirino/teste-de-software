@@ -38,9 +38,11 @@ def client_menu():
                             customer, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
-                    input("\nPressione ENTER para continuar...")
+
                 except Exception as e:
                     print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
 
             case "2":
                 id = int(input("\nID do cliente: "))
@@ -53,9 +55,11 @@ def client_menu():
                             customer, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
-                    input("\nPressione ENTER para continuar...")
+
                 except Exception as e:
                     print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
 
             case "3":
                 id = int(input("\nID do cliente: "))
@@ -70,9 +74,11 @@ def client_menu():
                             customer, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
-                    input("\nPressione ENTER para continuar...")
+
                 except Exception as e:
                     print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
 
             case "4":
                 customers = customer_service.list_customers()
@@ -116,9 +122,11 @@ def product_menu():
                             product, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
-                    input("\nPressione ENTER para continuar...")
+
                 except Exception as e:
                     print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
 
             case "2":
                 id = int(input("\nID do produto: "))
@@ -131,9 +139,11 @@ def product_menu():
                             product, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
-                    input("\nPressione ENTER para continuar...")
+
                 except Exception as e:
                     print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
 
             case "3":
                 id = int(input("\nID do produto: "))
@@ -148,9 +158,11 @@ def product_menu():
                             product, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
-                    input("\nPressione ENTER para continuar...")
+
                 except Exception as e:
                     print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
 
             case "4":
                 products = product_service.list_products()
@@ -197,9 +209,11 @@ def invoice_menu():
                             invoice, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
-                    input("\nPressione ENTER para continuar...")
+
                 except Exception as e:
                     print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
 
             case "2":
                 id = int(input("\nID da fatura: "))
@@ -212,9 +226,11 @@ def invoice_menu():
                             invoice, default=lambda o: o.__dict__, skipkeys=True
                         ),
                     )
-                    input("\nPressione ENTER para continuar...")
+
                 except Exception as e:
                     print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
 
             case "3":
                 invoices = invoice_service.list_invoices()
