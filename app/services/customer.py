@@ -51,6 +51,18 @@ class CustomerService:
                 return customer
         raise Exception("Cliente não encontrado!")
 
+    def find_customer_by_name(self, search_string: str):
+        """
+        Receive a 'search string' and returns customers whose names match it.
+
+        Returns an empty list if there are no matches.
+        """
+        results = []
+        for customer in self._customers:
+            if search_string.lower() in customer.name.lower():
+                results.append(customer)
+        return results
+
     def update_customer(self, customer_id: int, name: str, email: str):
         """
         Returns the new customer if successfull.

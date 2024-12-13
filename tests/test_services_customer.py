@@ -86,6 +86,36 @@ def test_find_customer_by_id_that_is_not_on_list():
     assert inexistent_customer.value.args[0] == "Cliente não encontrado!"
 
 
+def test_find_customer_by_name_that_matches():
+    # Arrange.
+    customer_service = CustomerService()
+    alice = customer_service.add_customer("Alice", "alice@email.com")
+    bob = customer_service.add_customer("Bob", "bob@email.com")
+    eve = customer_service.add_customer("Eve", "eve@email.com")
+
+    # Act.
+    result_single = customer_service.find_customer_by_name("Bob")
+    result_multiple = customer_service.find_customer_by_name("e")
+
+    # Assert.
+    assert result_single == [bob]
+    assert result_multiple == [alice, eve]
+
+
+def test_find_customer_by_name_that_does_not_match():
+    # Arrange.
+    customer_service = CustomerService()
+    customer_service.add_customer("Alice", "alice@email.com")
+    customer_service.add_customer("Bob", "bob@email.com")
+    customer_service.add_customer("Eve", "eve@email.com")
+
+    # Act.
+    result = customer_service.find_customer_by_name("Gregory")
+
+    # Assert.
+    assert result == []
+
+
 def test_update_customer_that_is_on_list():
     # Arrange.
     customer_service = CustomerService()

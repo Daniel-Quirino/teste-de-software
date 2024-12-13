@@ -22,6 +22,9 @@ def client_menu():
         print("2. Remover")
         print("3. Atualizar")
         print("4. Listar")
+        print("5. Buscar por ID")
+        print("6. Buscar por nome")
+        print("7. Buscar por e-mail")
         print("0. Voltar")
 
         action = input("Escolha uma opção: ")
@@ -84,6 +87,35 @@ def client_menu():
                 customers = customer_service.list_customers()
                 print("\n=== Clientes ===")
                 for customer in customers:
+                    print(
+                        json.dumps(
+                            customer, default=lambda o: o.__dict__, skipkeys=True
+                        )
+                    )
+                input("\nPressione ENTER para continuar...")
+
+            case "5":
+                id = int(input("\nID do cliente: "))
+
+                try:
+                    customer = customer_service.find_customer_by_id(id)
+                    print(
+                        "\nCliente encontrado:",
+                        json.dumps(
+                            customer, default=lambda o: o.__dict__, skipkeys=True
+                        ),
+                    )
+
+                except Exception as e:
+                    print("\n" + e.args[0])
+
+                input("\nPressione ENTER para continuar...")
+
+            case "6":
+                search_string = input("\nEntrada: ")
+                results = customer_service.find_customer_by_name(search_string)
+                print("\n=== Resultados ===")
+                for customer in results:
                     print(
                         json.dumps(
                             customer, default=lambda o: o.__dict__, skipkeys=True
