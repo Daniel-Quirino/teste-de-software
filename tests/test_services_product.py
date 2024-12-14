@@ -29,38 +29,38 @@ def test_add_multiple_valid_products():
 
 
 def test_add_product_with_empty_name():
-    # Arrange
+    # Arrange.
     product_service = ProductService()
 
-    # Act
+    # Act.
     with pytest.raises(ValueError) as exc_info:
         product_service.add_product("", 11.0)
 
-    # Assert
+    # Assert.
     assert str(exc_info.value) == "O nome do produto não pode ser vazio."
 
 
 def test_add_product_with_negative_price():
-    # Arrange
+    # Arrange.
     product_service = ProductService()
 
-    # Act
+    # Act.
     with pytest.raises(ValueError) as exc_info:
         product_service.add_product("Rice", -11.0)
 
-    # Assert  
+    # Assert.
     assert str(exc_info.value) == "O preço do produto deve ser maior que zero."
 
 
 def test_add_product_with_zero_price():
-    # Arrange
+    # Arrange.
     product_service = ProductService()
 
-    # Act 
+    # Act.
     with pytest.raises(ValueError) as exc_info:
         product_service.add_product("Rice", 0)
 
-    # Assert
+    # Assert.
     assert str(exc_info.value) == "O preço do produto deve ser maior que zero."
 
 
@@ -136,42 +136,49 @@ def test_find_product_by_name_that_does_not_match():
     # Assert.
     assert result == []
 
+
 def test_find_product_by_price_with_invalid_types():
-    # Arrange
+    # Arrange.
     product_service = ProductService()
 
-    # Act 
+    # Act.
     with pytest.raises(ValueError) as exc_info:
         product_service.find_product_by_price("low", "high")
 
-    # Assert  
-    assert str(exc_info.value) == "Os limites de preço devem ser números (float ou int)."
+    # Assert.
+    assert (
+        str(exc_info.value) == "Os limites de preço devem ser números (float ou int)."
+    )
+
 
 def test_find_product_by_price_with_negative_values():
-    # Arrange
+    # Arrange.
     product_service = ProductService()
 
-    # Act & Assert
+    # Act & Assert.
     with pytest.raises(ValueError) as exc_info:
         product_service.find_product_by_price(-10, 100)
     assert str(exc_info.value) == "Os limites de preço não podem ser negativos."
 
-    # Act & Assert
+    # Act & Assert.
     with pytest.raises(ValueError) as exc_info:
         product_service.find_product_by_price(10, -100)
     assert str(exc_info.value) == "Os limites de preço não podem ser negativos."
 
 
 def test_find_product_by_price_with_inverted_bounds():
-    # Arrange
+    # Arrange.
     product_service = ProductService()
 
-    # Act 
+    # Act.
     with pytest.raises(ValueError) as exc_info:
         product_service.find_product_by_price(100, 10)
-    
-    # Assert    
-    assert str(exc_info.value) == "O limite inferior não pode ser maior que o limite superior."
+
+    # Assert.
+    assert (
+        str(exc_info.value)
+        == "O limite inferior não pode ser maior que o limite superior."
+    )
 
 
 def test_find_product_by_price_that_matches():
