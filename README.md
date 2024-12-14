@@ -1,5 +1,7 @@
 # **Trabalho Prático 1:** Gerenciador de Faturas
 
+[![codecov](https://codecov.io/github/Daniel-Quirino/teste-de-software/graph/badge.svg?token=6EC9M4PCGS)](https://codecov.io/github/Daniel-Quirino/teste-de-software)
+
 **Universidade Federal de Minas Gerais | Departamento de Ciência da Computação | 2024/02**
 
 **Alunos:** Bernardo Reis, Daniel Quirino
