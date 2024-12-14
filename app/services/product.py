@@ -20,32 +20,32 @@ class ProductService:
     def __init__(self):
         self._products = []
         self._id_counter = 0
-        self._base_id = -1
 
     def load_persisted(self):
         """
         Reads persisted data.
         """
+        self._id_counter = -1
+
         file = open("./app/data/products.jsonl", "r")
         for line in file:
             product = Product(**json.loads(line))
             self._products.append(product)
-            if product.id > self._base_id:
-                self._base_id = product.id
-                self._id_counter = self._base_id + 1
+            if product.id > self._id_counter:
+                self._id_counter = product.id
         file.close()
+
+        self._id_counter += 1
 
     def persist(self):
         """
         Persists the data.
         """
-        file = open("./app/data/products.jsonl", "a")
+        file = open("./app/data/products.jsonl", "w")
         for product in self._products:
-            if product.id > self._base_id:
-                file.write(
-                    json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
-                    + "\n"
-                )
+            file.write(
+                json.dumps(product, default=lambda o: o.__dict__, skipkeys=True) + "\n"
+            )
         file.close()
 
     def add_product(self, name: str, price: float):
@@ -102,7 +102,9 @@ class ProductService:
 
         Returns an empty list if there are no matches.
         """
-        if not isinstance(lower_bound, (float, int)) or not isinstance(upper_bound, (float, int)):
+        if not isinstance(lower_bound, (float, int)) or not isinstance(
+            upper_bound, (float, int)
+        ):
             raise ValueError("Os limites de preço devem ser números (float ou int).")
 
         # Validation for negative values
@@ -111,7 +113,9 @@ class ProductService:
 
         # Validation for logical order of bounds
         if lower_bound > upper_bound:
-            raise ValueError("O limite inferior não pode ser maior que o limite superior.")
+            raise ValueError(
+                "O limite inferior não pode ser maior que o limite superior."
+            )
 
         results = []
         for product in self._products:
