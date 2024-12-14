@@ -290,7 +290,7 @@ def invoice_menu():
         print("3. Listar")
         print("4. Buscar por ID")
         print("5. Buscar por cliente")
-        print("6. Buscar por preço")
+        print("6. Buscar por produto")
         print("0. Voltar")
 
         action = input("Escolha uma opção: ")
@@ -366,6 +366,22 @@ def invoice_menu():
                 name = input("\nFiltro de nome: ")
                 email = input("Filtro de e-mail: ")
                 results = invoice_service.find_invoice_by_customer(name, email)
+                print("\n=== Resultados ===")
+                for invoice in results:
+                    print(
+                        json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True)
+                    )
+                input("\nPressione ENTER para continuar...")
+
+            case "6":
+                name = input("\nFiltro de nome: ")
+                lower_bound = input("Limiar inferior de preço: ")
+                lower_bound = float(lower_bound) if lower_bound != "" else float("-inf")
+                upper_bound = input("Limiar superior de preço: ")
+                upper_bound = float(upper_bound) if upper_bound != "" else float("inf")
+                results = invoice_service.find_invoice_by_product(
+                    name, lower_bound, upper_bound
+                )
                 print("\n=== Resultados ===")
                 for invoice in results:
                     print(

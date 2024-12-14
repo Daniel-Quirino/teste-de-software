@@ -133,6 +133,33 @@ class InvoiceService:
             results.append(invoice)
         return results
 
+    def find_invoice_by_product(
+        self,
+        name: str = "",
+        lower_bound: float = float("-inf"),
+        upper_bound: float = float("inf"),
+    ):
+        """
+        Returns a list of invoices whose products match the specified parameters.
+        An invoice is returned if it contains at least one product that matches the parameters.
+
+        Returns an empty list otherwise.
+        """
+        results = []
+        for invoice in self._invoices:
+            for product in invoice.products:
+                # Skips if a name is given but is not in the customer's name.
+                if name and (name.lower() not in product.name.lower()):
+                    continue
+                # Skips if bounds are given but the product is not within them.
+                if (lower_bound != float("-inf")) and (product.price < lower_bound):
+                    continue
+                if (upper_bound != float("inf")) and (product.price > upper_bound):
+                    continue
+                results.append(invoice)
+                break
+        return results
+
     def delete_invoice(self, invoice_id: int):
         """
         Returns the deleted invoice if successful.

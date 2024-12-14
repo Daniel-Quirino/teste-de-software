@@ -184,6 +184,48 @@ def test_find_invoice_by_customer_with_parameters_that_do_not_match(
     assert result == []
 
 
+def test_find_invoice_by_product_with_parameters_that_match(
+    product_service, customer_service, invoice_service
+):
+    # Arrange.
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    alice = customer_service.add_customer("Alice", "alice@gmail.com")
+    bob = customer_service.add_customer("Bob", "bob@hotmail.com")
+    invoice_alice = invoice_service.create_invoice(alice.id, [rice.id, beans.id])
+    invoice_bob = invoice_service.create_invoice(bob.id, [beans.id])
+
+    # Act.
+    result_name = invoice_service.find_invoice_by_product(name="Beans")
+    result_price = invoice_service.find_invoice_by_product(
+        lower_bound=10.0, upper_bound=11.0
+    )
+
+    # Assert.
+    assert result_name == [invoice_alice, invoice_bob]
+    assert result_price == [invoice_alice]
+
+
+def test_find_invoice_by_product_with_parameters_that_do_not_match(
+    product_service, customer_service, invoice_service
+):
+    # Arrange.
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    alice = customer_service.add_customer("Alice", "alice@gmail.com")
+    bob = customer_service.add_customer("Bob", "bob@hotmail.com")
+    invoice_service.create_invoice(alice.id, [rice.id, beans.id])
+    invoice_service.create_invoice(bob.id, [beans.id])
+
+    # Act.
+    result = invoice_service.find_invoice_by_product(
+        name="Beans", lower_bound=14.0, upper_bound=16.0
+    )
+
+    # Assert.
+    assert result == []
+
+
 def test_delete_invoice_that_is_on_list(
     product_service, customer_service, invoice_service
 ):
