@@ -50,13 +50,16 @@ class ProductService:
 
     def add_product(self, name: str, price: float):
         """
-        Appens a new product to the list of products.
+        Appends a new product to the list of products.
 
-        Raises Exception() if parameters are invalid.
+        Raises ValueError if parameters are invalid.
         """
-        # Checks if product parameters are valid.
-        if price <= 0 or name == "":
-            raise Exception("Nome e/ou preço inválido(s)!")
+
+        if name == "":
+            raise ValueError("O nome do produto não pode ser vazio.")
+
+        if price <= 0:
+            raise ValueError("O preço do produto deve ser maior que zero.")
 
         product = Product(self._id_counter, name, price)
         self._products.append(product)
@@ -99,9 +102,20 @@ class ProductService:
 
         Returns an empty list if there are no matches.
         """
+        if not isinstance(lower_bound, (float, int)) or not isinstance(upper_bound, (float, int)):
+            raise ValueError("Os limites de preço devem ser números (float ou int).")
+
+        # Validation for negative values
+        if lower_bound < 0 or upper_bound < 0:
+            raise ValueError("Os limites de preço não podem ser negativos.")
+
+        # Validation for logical order of bounds
+        if lower_bound > upper_bound:
+            raise ValueError("O limite inferior não pode ser maior que o limite superior.")
+
         results = []
         for product in self._products:
-            if lower_bound <= product.price and product.price <= upper_bound:
+            if lower_bound <= product.price <= upper_bound:
                 results.append(product)
         return results
 

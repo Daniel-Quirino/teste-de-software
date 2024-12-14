@@ -28,20 +28,52 @@ def test_add_multiple_valid_customers():
     assert alice.id != bob.id != eve.id
 
 
-def test_add_invalid_customer():
-    # Arrange.
+def test_add_customer_with_empty_name():
+    # Arrange
     customer_service = CustomerService()
 
-    # Act.
-    with pytest.raises(Exception) as invalid_name:
+    # Act 
+    with pytest.raises(ValueError) as exc_info:
         customer_service.add_customer("", "alice@email.com")
-    with pytest.raises(Exception) as invalid_email:
+
+    # Assert
+    assert str(exc_info.value) == "O nome não pode ser vazio."
+
+
+def test_add_customer_with_empty_email():
+    # Arrange
+    customer_service = CustomerService()
+
+    # Act
+    with pytest.raises(ValueError) as exc_info:
         customer_service.add_customer("Alice", "")
+    
+    # Assert
+    assert str(exc_info.value) == "O e-mail não pode ser vazio."
 
-    # Assert.
-    assert invalid_name.value.args[0] == "Nome e/ou e-mail inválido(s)!"
-    assert invalid_email.value.args[0] == "Nome e/ou e-mail inválido(s)!"
 
+def test_add_customer_with_invalid_email():
+    # Arrange
+    customer_service = CustomerService()
+
+    # Act
+    with pytest.raises(ValueError) as exc_info:
+        customer_service.add_customer("Alice", "aliceemail.com")
+    
+    # Assert
+    assert str(exc_info.value) == "Formato de e-mail inválido. Por favor, insira um e-mail correto."
+
+def test_add_customer_with_duplicate_email():
+    # Arrange
+    customer_service = CustomerService()
+    customer_service.add_customer("Alice", "alice@email.com")
+
+    # Act
+    with pytest.raises(ValueError) as exc_info:
+        customer_service.add_customer("Bob", "alice@email.com")
+    
+    # Assert
+    assert str(exc_info.value) == "Este e-mail já está cadastrado."
 
 def test_list_customers():
     # Arrange.
@@ -84,6 +116,17 @@ def test_find_customer_by_id_that_is_not_on_list():
 
     # Assert.
     assert inexistent_customer.value.args[0] == "Cliente não encontrado!"
+
+def test_find_customer_by_id_with_none_id():
+    # Arrange
+    customer_service = CustomerService()
+
+    # Act
+    with pytest.raises(ValueError) as exc_info:
+        customer_service.find_customer_by_id(None)
+
+    # Assert
+    assert str(exc_info.value) == "O ID do cliente não pode ser nulo."
 
 
 def test_find_customer_by_name_that_matches():

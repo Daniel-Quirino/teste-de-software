@@ -255,14 +255,21 @@ def product_menu():
             case "7":
                 lower_bound = float(input("\nLimite inferior: "))
                 upper_bound = float(input("Limite superior: "))
-                results = product_service.find_product_by_price(
-                    lower_bound, upper_bound
-                )
-                print("\n=== Resultados ===")
-                for product in results:
-                    print(
-                        json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
+
+                try:
+                    results = product_service.find_product_by_price(
+                        lower_bound, upper_bound
                     )
+                    print("\n=== Resultados ===")
+                    for product in results:
+                        print(
+                            json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
+                        )
+                    input("\nPressione ENTER para continuar...")
+
+                except Exception as e:
+                    print("\n" + e.args[0])
+
                 input("\nPressione ENTER para continuar...")
 
             case "0":
