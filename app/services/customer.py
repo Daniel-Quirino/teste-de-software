@@ -10,6 +10,7 @@ class Customer:
         self.id = id
         self.name = name
         self.email = email
+        
 
 
 class CustomerService:
