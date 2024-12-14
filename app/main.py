@@ -1,5 +1,4 @@
-import os
-import json
+from services.menu import MenuService
 from services.invoice import InvoiceService
 from services.product import ProductService
 from services.customer import CustomerService
@@ -7,6 +6,7 @@ from services.customer import CustomerService
 # Declaring services.
 product_service = ProductService()
 customer_service = CustomerService()
+menu_service = MenuService()
 invoice_service = InvoiceService(product_service, customer_service)
 
 # Loading persisted data.
@@ -14,410 +14,163 @@ product_service.load_persisted()
 customer_service.load_persisted()
 invoice_service.load_persisted()
 
-
-# Declaring menus.
 def client_menu():
     while True:
-        # Clears console.
-        os.system("cls" if os.name == "nt" else "clear")
-
-        # Displays action menu.
-        print("\n=== Ações sobre Clientes ===")
-        print("1. Adicionar")
-        print("2. Remover")
-        print("3. Atualizar")
-        print("4. Listar")
-        print("5. Buscar por ID")
-        print("6. Buscar por nome")
-        print("7. Buscar por e-mail")
-        print("0. Voltar")
-
+        menu_service.show_header('client')
         action = input("Escolha uma opção: ")
-        match action:
-            case "1":
-                name = input("\nNome do cliente: ")
-                email = input("E-mail do cliente: ")
 
-                try:
-                    customer = customer_service.add_customer(name, email)
-                    print(
-                        "\nCliente adicionado:",
-                        json.dumps(
-                            customer, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
+        actions = {
+            "1": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: customer_service.add_customer(
+                    input("\nNome do cliente: "),
+                    input("E-mail do cliente: ")
+                ),
+                success_message="\nCliente adicionado:"
+            ),
+            "2": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: customer_service.delete_customer(int(input("\nID do cliente: "))),
+                success_message="\nCliente removido:"
+            ),
+            "3": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: customer_service.update_customer(
+                    int(input("\nID do cliente: ")),
+                    input("Novo nome do cliente: "),
+                    input("Novo e-mail do cliente: ")
+                ),
+                success_message="\nCliente atualizado:"
+            ),
+            "4": lambda: [
+                menu_service.display_json_message("", customer) for customer in customer_service.list_customers()
+            ],
+            "5": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: customer_service.find_customer_by_id(int(input("\nID do cliente: "))),
+                success_message="\nCliente encontrado:"
+            ),
+            "6": lambda: [
+                menu_service.display_json_message("", customer) for customer in customer_service.find_customer_by_name(
+                    input("\nEntrada: ")
+                )
+            ],
+            "7": lambda: [
+                menu_service.display_json_message("", customer) for customer in customer_service.find_customer_by_email(
+                    input("\nEntrada: ")
+                )
+            ],
+            "0": lambda: "break"
+        }
 
-                except Exception as e:
-                    print("\n" + e.args[0])
+        if actions.get(action, lambda: print("\nOpção inválida"))() == "break":
+            break
 
-                input("\nPressione ENTER para continuar...")
-
-            case "2":
-                id = int(input("\nID do cliente: "))
-
-                try:
-                    customer = customer_service.delete_customer(id)
-                    print(
-                        "\nCliente removido:",
-                        json.dumps(
-                            customer, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "3":
-                id = int(input("\nID do cliente: "))
-                new_name = input("Novo nome do cliente: ")
-                new_email = input("Novo e-mail do cliente: ")
-
-                try:
-                    customer = customer_service.update_customer(id, new_name, new_email)
-                    print(
-                        "\nCliente atualizado:",
-                        json.dumps(
-                            customer, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "4":
-                customers = customer_service.list_customers()
-                print("\n=== Clientes ===")
-                for customer in customers:
-                    print(
-                        json.dumps(
-                            customer, default=lambda o: o.__dict__, skipkeys=True
-                        )
-                    )
-                input("\nPressione ENTER para continuar...")
-
-            case "5":
-                id = int(input("\nID do cliente: "))
-
-                try:
-                    customer = customer_service.find_customer_by_id(id)
-                    print(
-                        "\nCliente encontrado:",
-                        json.dumps(
-                            customer, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "6":
-                search_string = input("\nEntrada: ")
-                results = customer_service.find_customer_by_name(search_string)
-                print("\n=== Resultados ===")
-                for customer in results:
-                    print(
-                        json.dumps(
-                            customer, default=lambda o: o.__dict__, skipkeys=True
-                        )
-                    )
-                input("\nPressione ENTER para continuar...")
-
-            case "7":
-                search_string = input("\nEntrada: ")
-                results = customer_service.find_customer_by_email(search_string)
-                print("\n=== Resultados ===")
-                for customer in results:
-                    print(
-                        json.dumps(
-                            customer, default=lambda o: o.__dict__, skipkeys=True
-                        )
-                    )
-                input("\nPressione ENTER para continuar...")
-
-            case "0":
-                break
-
+        input("\nPressione ENTER para continuar...")
 
 def product_menu():
     while True:
-        # Clears console.
-        os.system("cls" if os.name == "nt" else "clear")
-
-        # Displays action menu.
-        print("\n=== Ações sobre Produtos ===")
-        print("1. Adicionar")
-        print("2. Remover")
-        print("3. Atualizar")
-        print("4. Listar")
-        print("5. Buscar por ID")
-        print("6. Buscar por nome")
-        print("7. Buscar por preço")
-        print("0. Voltar")
-
+        menu_service.show_header('product')
         action = input("Escolha uma opção: ")
-        match action:
-            case "1":
-                name = input("\nNome do produto: ")
-                price = float(input("Preço do produto: "))
 
-                try:
-                    product = product_service.add_product(name, price)
-                    print(
-                        "\nProduto adicionado:",
-                        json.dumps(
-                            product, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
+        actions = {
+            "1": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: product_service.add_product(
+                    input("\nNome do produto: "), float(input("Preço do produto: "))
+                ), 
+                success_message="\nProduto adicionado:"
+            ),
+            "2": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: product_service.delete_product(int(input("\nID do produto: "))),
+                success_message="\nProduto removido:"
+            ),
+            "3": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: product_service.update_product(
+                    int(input("\nID do produto: ")), 
+                    input("Novo nome do produto: "), 
+                    float(input("Novo preço do produto: "))
+                ),
+                success_message="\nProduto atualizado:"
+            ),
+            "4": lambda: [
+                menu_service.display_json_message("", product) for product in product_service.list_products()
+            ],
+            "5": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: product_service.find_product_by_id(int(input("\nID do produto: "))),
+                success_message="\nProduto encontrado:"
+            ),
+            "6": lambda: [
+                menu_service.display_json_message("", product) for product in product_service.find_product_by_name(input("\nEntrada: "))
+            ],
+            "7": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: product_service.find_product_by_price(
+                    float(input("\nLimite inferior: ")), float(input("Limite superior: "))
+                ),
+                success_message="\n=== Resultados ==="
+            ),
+            "0": lambda: exit()
+        }
 
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "2":
-                id = int(input("\nID do produto: "))
-
-                try:
-                    product = product_service.delete_product(id)
-                    print(
-                        "\nProduto removido:",
-                        json.dumps(
-                            product, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "3":
-                id = int(input("\nID do produto: "))
-                new_name = input("Novo nome do produto: ")
-                new_price = float(input("Novo preço do produto: "))
-
-                try:
-                    product = product_service.update_product(id, new_name, new_price)
-                    print(
-                        "\nProduto atualizado:",
-                        json.dumps(
-                            product, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "4":
-                products = product_service.list_products()
-                print("\n=== Produtos ===")
-                for product in products:
-                    print(
-                        json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
-                    )
-                input("\nPressione ENTER para continuar...")
-
-            case "5":
-                id = int(input("\nID do produto: "))
-
-                try:
-                    product = product_service.find_product_by_id(id)
-                    print(
-                        "\nProduto encontrado:",
-                        json.dumps(
-                            product, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "6":
-                search_string = input("\nEntrada: ")
-                results = product_service.find_product_by_name(search_string)
-                print("\n=== Resultados ===")
-                for product in results:
-                    print(
-                        json.dumps(product, default=lambda o: o.__dict__, skipkeys=True)
-                    )
-                input("\nPressione ENTER para continuar...")
-
-            case "7":
-                lower_bound = float(input("\nLimite inferior: "))
-                upper_bound = float(input("Limite superior: "))
-
-                try:
-                    results = product_service.find_product_by_price(
-                        lower_bound, upper_bound
-                    )
-                    print("\n=== Resultados ===")
-                    for product in results:
-                        print(
-                            json.dumps(
-                                product, default=lambda o: o.__dict__, skipkeys=True
-                            )
-                        )
-                    input("\nPressione ENTER para continuar...")
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "0":
-                break
-
+        actions.get(action, lambda: print("\nOpção inválida"))()
+        if action != "0":
+            input("\nPressione ENTER para continuar...")
 
 def invoice_menu():
     while True:
-        # Clears console.
-        os.system("cls" if os.name == "nt" else "clear")
-
-        # Displays action menu.
-        print("\n=== Ações sobre Faturas ===")
-        print("1. Adicionar")
-        print("2. Remover")
-        print("3. Listar")
-        print("4. Buscar por ID")
-        print("5. Buscar por cliente")
-        print("6. Buscar por produto")
-        print("0. Voltar")
-
+        menu_service.show_header('invoice')
         action = input("Escolha uma opção: ")
-        match action:
-            case "1":
-                customer_id = int(input("\nID do cliente: "))
-                product_ids = [
-                    int(product_id)
-                    for product_id in input(
-                        "IDs dos produtos (separados por vírgula): "
-                    ).split(",")
-                    if product_id.isnumeric()
-                ]
 
-                try:
-                    invoice = invoice_service.create_invoice(customer_id, product_ids)
-                    print(
-                        "\nFatura criada:",
-                        json.dumps(
-                            invoice, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "2":
-                id = int(input("\nID da fatura: "))
-
-                try:
-                    invoice = invoice_service.delete_invoice(id)
-                    print(
-                        "\nFatura removida:",
-                        json.dumps(
-                            invoice, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "3":
-                invoices = invoice_service.list_invoices()
-                print("\n=== Faturas ===")
-                for invoice in invoices:
-                    print(
-                        json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True)
-                    )
-                input("\nPressione ENTER para continuar...")
-
-            case "4":
-                id = int(input("\nID da fatura: "))
-
-                try:
-                    invoice = invoice_service.find_invoice_by_id(id)
-                    print(
-                        "\nFatura encontrada:",
-                        json.dumps(
-                            invoice, default=lambda o: o.__dict__, skipkeys=True
-                        ),
-                    )
-
-                except Exception as e:
-                    print("\n" + e.args[0])
-
-                input("\nPressione ENTER para continuar...")
-
-            case "5":
-                name = input("\nFiltro de nome: ")
-                email = input("Filtro de e-mail: ")
-                results = invoice_service.find_invoice_by_customer(name, email)
-                print("\n=== Resultados ===")
-                for invoice in results:
-                    print(
-                        json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True)
-                    )
-                input("\nPressione ENTER para continuar...")
-
-            case "6":
-                name = input("\nFiltro de nome: ")
-                lower_bound = input("Limiar inferior de preço: ")
-                lower_bound = float(lower_bound) if lower_bound != "" else float("-inf")
-                upper_bound = input("Limiar superior de preço: ")
-                upper_bound = float(upper_bound) if upper_bound != "" else float("inf")
-                results = invoice_service.find_invoice_by_product(
-                    name, lower_bound, upper_bound
+        actions = {
+            "1": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: invoice_service.create_invoice(
+                    int(input("\nID do cliente: ")),
+                    [
+                        int(product_id)
+                        for product_id in input("IDs dos produtos (separados por vírgula): ").split(",")
+                        if product_id.isnumeric()
+                    ]
+                ),
+                success_message="\nFatura criada:"
+            ),
+            "2": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: invoice_service.delete_invoice(int(input("\nID da fatura: "))),
+                success_message="\nFatura removida:"
+            ),
+            "3": lambda: [
+                menu_service.display_json_message("", invoice) for invoice in invoice_service.list_invoices()
+            ],
+            "4": lambda: menu_service.execute_with_error_handling(
+                callback=lambda: invoice_service.find_invoice_by_id(int(input("\nID da fatura: "))),
+                success_message="\nFatura encontrada:"
+            ),
+            "5": lambda: [
+                menu_service.display_json_message("", invoice)
+                for invoice in invoice_service.find_invoice_by_customer(
+                    input("\nFiltro de nome: "),
+                    input("Filtro de e-mail: ")
                 )
-                print("\n=== Resultados ===")
-                for invoice in results:
-                    print(
-                        json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True)
-                    )
-                input("\nPressione ENTER para continuar...")
+            ],
+            "6": lambda: [
+                menu_service.display_json_message("", invoice)
+                for invoice in invoice_service.find_invoice_by_product(
+                    input("\nFiltro de nome: "),
+                    float(input("Limiar inferior de preço: ") or float("-inf")),
+                    float(input("Limiar superior de preço: ") or float("inf"))
+                )
+            ],
+            "0": lambda: "break"
+        }
 
-            case "0":
-                break
-
-
-while True:
-    # Clears console.
-    os.system("cls" if os.name == "nt" else "clear")
-
-    # Displays action menu.
-    print("\n=== Gerenciador de Faturas ===")
-    print("1. Clientes")
-    print("2. Produtos")
-    print("3. Faturas")
-    print("0. Sair")
-
-    action = input("Escolha uma opção: ")
-    match action:
-        case "1":
-            client_menu()
-
-        case "2":
-            product_menu()
-
-        case "3":
-            invoice_menu()
-
-        case "0":
+        if actions.get(action, lambda: print("\nOpção inválida"))() == "break":
             break
 
+        input("\nPressione ENTER para continuar...")
+
+while True:
+    menu_service.show_header('main')
+
+    action = input("Escolha uma opção: ")
+
+    if(action == "1"): client_menu()
+    if(action == "2"): product_menu()
+    if(action == "3"): invoice_menu()
+    if(action == "0"): break
 # Updates persisted data.
 invoice_service.persist()
 customer_service.persist()
