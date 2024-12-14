@@ -45,6 +45,8 @@ class InvoiceService:
         file = open("./app/data/invoices.jsonl", "r")
         for line in file:
             invoice = Invoice(**json.loads(line))
+            invoice.customer = Customer(**invoice.customer)
+            invoice.products = [Product(**product) for product in invoice.products]
             self._invoices.append(invoice)
             if invoice.id > self._base_id:
                 self._base_id = invoice.id
@@ -112,6 +114,24 @@ class InvoiceService:
             if invoice.id == invoice_id:
                 return invoice
         raise Exception("Fatura não encontrada!")
+
+    def find_invoice_by_customer(self, name: str = "", email: str = ""):
+        """
+        Returns a list of invoices whose customers match the specified parameters.
+
+        Returns an empty list otherwise.
+        """
+        results = []
+        for invoice in self._invoices:
+            customer = invoice.customer
+            # Skips if a name is given but is not in the customer's name.
+            if name and (name.lower() not in customer.name.lower()):
+                continue
+            # Skips if an email is given but is not in the customer's email.
+            if email and (email.lower() not in customer.email.lower()):
+                continue
+            results.append(invoice)
+        return results
 
     def delete_invoice(self, invoice_id: int):
         """

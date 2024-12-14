@@ -1,6 +1,7 @@
 import json
 import re
 
+
 class Customer:
     """
     Defines a customer.
@@ -10,7 +11,6 @@ class Customer:
         self.id = id
         self.name = name
         self.email = email
-        
 
 
 class CustomerService:
@@ -63,10 +63,12 @@ class CustomerService:
             raise ValueError("O e-mail não pode ser vazio.")
 
         # Regex for validating an Email
-        email_regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        email_regex = r"^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
 
         if not re.match(email_regex, email):
-            raise ValueError("Formato de e-mail inválido. Por favor, insira um e-mail correto.")
+            raise ValueError(
+                "Formato de e-mail inválido. Por favor, insira um e-mail correto."
+            )
 
         if any(customer.email == email for customer in self._customers):
             raise ValueError("Este e-mail já está cadastrado.")
@@ -137,7 +139,6 @@ class CustomerService:
                 self._customers[i] = Customer(customer_id, name, email)
                 return self._customers[i]
         raise Exception("Cliente não encontrado!")
-
 
     def delete_customer(self, customer_id: int):
         """

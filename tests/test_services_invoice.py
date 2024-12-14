@@ -146,6 +146,44 @@ def test_find_invoice_by_id_that_is_not_on_list(
     assert inexistent_invoice.value.args[0] == "Fatura não encontrada!"
 
 
+def test_find_invoice_by_customer_with_parameters_that_match(
+    product_service, customer_service, invoice_service
+):
+    # Arrange.
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    alice = customer_service.add_customer("Alice", "alice@gmail.com")
+    bob = customer_service.add_customer("Bob", "bob@hotmail.com")
+    invoice_alice = invoice_service.create_invoice(alice.id, [rice.id, beans.id])
+    invoice_bob = invoice_service.create_invoice(bob.id, [beans.id])
+
+    # Act.
+    result_name = invoice_service.find_invoice_by_customer(name="Alice")
+    result_email = invoice_service.find_invoice_by_customer(email="hotmail")
+
+    # Assert.
+    assert result_name == [invoice_alice]
+    assert result_email == [invoice_bob]
+
+
+def test_find_invoice_by_customer_with_parameters_that_do_not_match(
+    product_service, customer_service, invoice_service
+):
+    # Arrange.
+    rice = product_service.add_product("Rice", 11.0)
+    beans = product_service.add_product("Beans", 12.0)
+    alice = customer_service.add_customer("Alice", "alice@gmail.com")
+    bob = customer_service.add_customer("Bob", "bob@hotmail.com")
+    invoice_service.create_invoice(alice.id, [rice.id, beans.id])
+    invoice_service.create_invoice(bob.id, [beans.id])
+
+    # Act.
+    result = invoice_service.find_invoice_by_customer(name="Alice", email="hotmail")
+
+    # Assert.
+    assert result == []
+
+
 def test_delete_invoice_that_is_on_list(
     product_service, customer_service, invoice_service
 ):
