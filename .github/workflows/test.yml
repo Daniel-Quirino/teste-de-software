@@ -25,11 +25,17 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Create and activate virtual environment
-        shell: bash
+      - name: Create virtual environment
+        run: python -m venv ./.venv
+
+      - name: Activate virtual environment
         run: |
-          python -m venv ./.venv
-          source ./.venv/bin/activate
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            .\.venv\Scripts\Activate.ps1
+          else
+            source ./.venv/bin/activate
+          fi
+        shell: bash
 
       - name: Install dependencies
         run: pip install -r requirements.txt
