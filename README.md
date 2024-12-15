@@ -16,7 +16,9 @@ Este projeto teve por objetivo a prática de conceitos e de técnicas associados
 
 Em mais detalhes, existem três principais serviços: um de clientes, um de produtos e um de faturas. Os serviços de clientes e de produtos são bem similares, com suporte para adição/remoção/atualização de entidades, além de operações de listagem e de busca com base em seus parâmetros. Clientes são definidos por um nome e por um e-mail, enquanto produtos são caracterizados por um nome e por um preço. Já o serviço de faturas oferece suporte para adição/remoção, além de listagem e busca parametrizada. Uma fatura detém um cliente, uma lista de produtos, o valor total dos produtos e sua data de criação. Todas as entidades (clientes, produtos e faturas) possuem um identificador único dentro de seu grupo, o qual é utilizado para diversas manipulações no sistema.
 
-Em um primeiro momento, foram implementados apenas **testes de unidade**, sob pretexto da verificação de unidades pequenas, autocontidas e independentes do código, com destaque para a lógica de negócio. Em etapas futuras, pretende-se implementar **testes de integração e e2e**, completando toda a pirâmide de testes e estabelecendo uma suíte completa para o ecossistema do software implementado, garantindo a sua qualidade ao decorrer do ciclo de desenvolvimento.
+Há também um serviço de "menu", o qual consiste na implementação de uma interface via linha de comando para o sistema. A orquestração de todas essas entidades é feita no arquivo de entrada ```app/main.py```.
+
+Em um primeiro momento, foram implementados apenas **testes de unidade**, sob pretexto da verificação de unidades pequenas, autocontidas e independentes do código, com destaque para a lógica de negócio. Todos os testes podem ser encontrados no diretório ```tests/```. Em etapas futuras, pretende-se implementar **testes de integração e e2e**, completando toda a pirâmide de testes e estabelecendo uma suíte completa para o ecossistema do software implementado, garantindo a sua qualidade ao decorrer do ciclo de desenvolvimento.
 
 ## Tecnologias
 
