@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+      - alt
 
 jobs:
   tests:
@@ -25,13 +26,10 @@ jobs:
           python-version: '3.x'
 
       - name: Create and activate virtual environment
+        shell: bash
         run: |
           python -m venv ./.venv
-          if ("${{ runner.os }}" -eq "Windows") {
-            .\.venv\Scripts\Activate.ps1
-          } else {
-            source .venv/bin/activate
-          }
+          source ./.venv/bin/activate
 
       - name: Install dependencies
         run: pip install -r requirements.txt
