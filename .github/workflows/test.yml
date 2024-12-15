@@ -28,10 +28,11 @@ jobs:
       - name: Create and activate virtual environment
         run: |
           python -m venv ./.venv
-          source .venv/bin/activate  # Unix shells
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            .venv\Scripts\activate
-          fi
+          if ("${{ runner.os }}" -eq "Windows") {
+            .\.venv\Scripts\Activate.ps1
+          } else {
+            source .venv/bin/activate
+          }
 
       - name: Install dependencies
         run: pip install -r requirements.txt
