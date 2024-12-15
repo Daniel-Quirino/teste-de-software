@@ -1,7 +1,5 @@
 # **Trabalho Prático 1:** Gerenciador de Faturas
 
-[![codecov](https://codecov.io/github/Daniel-Quirino/teste-de-software/graph/badge.svg?token=6EC9M4PCGS)](https://codecov.io/github/Daniel-Quirino/teste-de-software)
-
 **Universidade Federal de Minas Gerais | Departamento de Ciência da Computação | 2024/02**
 
 **Alunos:** Bernardo Reis, Daniel Quirino
@@ -22,9 +20,20 @@ Em um primeiro momento, foram implementados apenas **testes de unidade**, sob pr
 
 ## Tecnologias
 
+<div align="center">
+  <br/>
+    
+   [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+   [![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)](https://docs.pytest.org/)
+   [![codecov](https://img.shields.io/codecov/c/github/Daniel-Quirino/teste-de-software?token=6EC9M4PCGS&style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/github/Daniel-Quirino/teste-de-software)
+   ![GitHub Actions](https://img.shields.io/badge/github_actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+
+</div>
+
 A implementação do "back-end" foi feita com a linguagem de programação **Python**. O "front-end" consiste em uma simples interface via linha de comando, também feita nessa linguagem. A comunicação entre os dois é feita de maneira direta via imports e chamadas de função - eles executam como uma aplicação única e monolítica. Até o momento, não houve a utilização de nenhum serviço externo, como uma **base de dados**. Há, porém, uma forma de persistência, em que clientes, produtos e faturas criados no sistema são armazenados no diretório ```app/data``` como arquivos ```.jsonl```. Nas próximas etapas do trabalho, as quais irão envolver testes de integração e e2e, talvez o sistema seja evoluído com um front-end separado ou com uma base de dados externa.
 
 Em termos de **frameworks**, foi utilizado o **pytest** para a escrita, a execução e a geração de relatórios de **coverage** para os testes de unidade. Esta última funcionalidade, em particular, foi feita por meio da extensão **pytest-cov** do framework principal. A manipulação dos processos CI/CD que contemplam essa verificação foi feita com base nas pipelines do **GitHub Actions**, com a exportação de resultados para a plataforma **CodeCov**.
+
 
 ## Instruções de Build e de Execução (Linux)
 
