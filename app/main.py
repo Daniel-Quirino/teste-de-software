@@ -104,12 +104,13 @@ def product_menu():
                 ),
                 success_message="\n=== Resultados ==="
             ),
-            "0": lambda: exit()
+            "0": lambda: "break"
         }
 
-        actions.get(action, lambda: print("\nOpção inválida"))()
-        if action != "0":
-            input("\nPressione ENTER para continuar...")
+        if actions.get(action, lambda: print("\nOpção inválida"))() == "break":
+            break
+
+        input("\nPressione ENTER para continuar...")
 
 def invoice_menu():
     while True:
@@ -163,7 +164,7 @@ def invoice_menu():
         input("\nPressione ENTER para continuar...")
 
 while True:
-    menu_service.show_header('main')
+    menu_service.show_header("main")
 
     action = input("Escolha uma opção: ")
 
@@ -171,6 +172,7 @@ while True:
     if(action == "2"): product_menu()
     if(action == "3"): invoice_menu()
     if(action == "0"): break
+
 # Updates persisted data.
 invoice_service.persist()
 customer_service.persist()
