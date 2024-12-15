@@ -30,7 +30,7 @@ jobs:
 
       - name: Activate virtual environment
         run: |
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
+          if [ "${{ runner.os }}" == "Windows" ]; then
             .\.venv\Scripts\Activate.ps1
           else
             source ./.venv/bin/activate
