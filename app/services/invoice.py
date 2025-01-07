@@ -37,13 +37,14 @@ class InvoiceService:
         self._invoices = []
         self._id_counter = 0
 
-    def load_persisted(self):
+    def load_persisted(self, path: str = "./app/data/invoices.jsonl"):
         """
         Reads persisted data.
         """
         self._id_counter = -1
 
-        file = open("./app/data/invoices.jsonl", "r")
+        file = open(path, "a+")
+        file.seek(0)
         for line in file:
             invoice = Invoice(**json.loads(line))
             invoice.customer = Customer(**invoice.customer)
@@ -55,11 +56,11 @@ class InvoiceService:
 
         self._id_counter += 1
 
-    def persist(self):
+    def persist(self, path: str = "./app/data/invoices.jsonl"):
         """
         Persists the data.
         """
-        file = open("./app/data/invoices.jsonl", "w")
+        file = open(path, "w")
         for invoice in self._invoices:
             file.write(
                 json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True) + "\n"

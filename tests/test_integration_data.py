@@ -1,0 +1,74 @@
+import os
+from app.services.invoice import *
+from app.services.product import *
+from app.services.customer import *
+
+
+def test_persist_and_load_products_from_file():
+    # Arrange.
+    data_path = "temp_products.jsonl"
+    product_service = ProductService()
+    product = product_service.add_product("Rice", 10.0)
+
+    # Act.
+    product_service.persist(data_path)
+
+    # Assert.
+    new_product_service = ProductService()
+    new_product_service.load_persisted(data_path)
+    new_product = new_product_service.find_product_by_id(product.id)
+    assert os.path.exists(data_path)
+    assert new_product.name == product.name
+    assert new_product.price == product.price
+    assert len(new_product_service.list_products()) == 1
+
+    # Clean up.
+    os.remove(data_path)
+
+
+def test_persist_and_load_customers_from_file():
+    # Arrange.
+    data_path = "temp_customers.jsonl"
+    customer_service = CustomerService()
+    customer = customer_service.add_customer("Alice", "alice@email.com")
+
+    # Act.
+    customer_service.persist(data_path)
+
+    # Assert.
+    new_customer_service = CustomerService()
+    new_customer_service.load_persisted(data_path)
+    new_customer = new_customer_service.find_customer_by_id(customer.id)
+    assert os.path.exists(data_path)
+    assert new_customer.name == customer.name
+    assert new_customer.email == customer.email
+    assert len(new_customer_service.list_customers()) == 1
+
+    # Clean up.
+    os.remove(data_path)
+
+
+def test_persist_and_load_invoices_from_file():
+    # Arrange.
+    data_path = "temp_invoices.jsonl"
+    product_service = ProductService()
+    customer_service = CustomerService()
+    invoice_service = InvoiceService(product_service, customer_service)
+    rice = product_service.add_product("Rice", 10.0)
+    alice = customer_service.add_customer("Alice", "alice@email.com")
+    invoice = invoice_service.create_invoice(alice.id, [rice.id])
+
+    # Act.
+    invoice_service.persist(data_path)
+
+    # Assert.
+    new_invoice_service = InvoiceService(product_service, customer_service)
+    new_invoice_service.load_persisted(data_path)
+    new_invoice = new_invoice_service.find_invoice_by_id(invoice.id)
+    assert os.path.exists(data_path)
+    assert new_invoice.customer.name == invoice.customer.name
+    assert new_invoice.products[0].name == invoice.products[0].name
+    assert len(new_invoice_service.list_invoices()) == 1
+
+    # Clean up.
+    os.remove(data_path)

@@ -21,13 +21,14 @@ class ProductService:
         self._products = []
         self._id_counter = 0
 
-    def load_persisted(self):
+    def load_persisted(self, path: str = "./app/data/products.jsonl"):
         """
         Reads persisted data.
         """
         self._id_counter = -1
 
-        file = open("./app/data/products.jsonl", "r")
+        file = open(path, "a+")
+        file.seek(0)
         for line in file:
             product = Product(**json.loads(line))
             self._products.append(product)
@@ -37,11 +38,11 @@ class ProductService:
 
         self._id_counter += 1
 
-    def persist(self):
+    def persist(self, path: str = "./app/data/products.jsonl"):
         """
         Persists the data.
         """
-        file = open("./app/data/products.jsonl", "w")
+        file = open(path, "w")
         for product in self._products:
             file.write(
                 json.dumps(product, default=lambda o: o.__dict__, skipkeys=True) + "\n"
