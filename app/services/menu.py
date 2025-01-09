@@ -28,4 +28,4 @@ class MenuService:
             result = callback()  # Execute the callback function
             self.display_json_message(success_message, result)
         except Exception as e:
-            print(error_message, e)
+            print(error_message, str(e))
