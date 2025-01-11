@@ -119,6 +119,9 @@ def test_remove_customer_and_persist_change():
     assert inexistent_customer.value.args[0] == "Cliente não encontrado!"
     assert len(new_customer_service.list_customers()) == 0
 
+    # Clean up.
+    os.remove(data_path)
+
 
 def test_remove_invoice_and_persist_change():
     # Arrange.
