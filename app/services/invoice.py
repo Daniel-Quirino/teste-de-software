@@ -2,6 +2,7 @@ from .product import *
 from .customer import *
 from datetime import datetime
 
+import logging
 
 class Invoice:
     """
@@ -22,6 +23,7 @@ class Invoice:
         self.total = total
         self.date = date
 
+        logging.basicConfig(filename='example.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
 class InvoiceService:
     """
@@ -41,6 +43,8 @@ class InvoiceService:
         """
         Reads persisted data.
         """
+        logging.log(logging.INFO, "Carregar Faturas")
+
         self._id_counter = -1
 
         file = open(path, "a+")
@@ -55,17 +59,25 @@ class InvoiceService:
         file.close()
 
         self._id_counter += 1
+        
+        logging.log(logging.INFO, "Carregou as faturas ")
+
 
     def persist(self, path: str = "./app/data/invoices.jsonl"):
         """
         Persists the data.
         """
+        logging.log(logging.INFO, "Armazenar as faturas ")
+
         file = open(path, "w")
         for invoice in self._invoices:
             file.write(
                 json.dumps(invoice, default=lambda o: o.__dict__, skipkeys=True) + "\n"
             )
         file.close()
+
+        logging.log(logging.INFO, "Armazenou as faturas")
+
 
     def _calculate_total(self, products: list[Product]):
         """
@@ -82,6 +94,9 @@ class InvoiceService:
         Receives a customer id and a set of product ids,
         calculates the total cost and saves as an invoice.
         """
+        logging.log(logging.INFO, "Criar fatura")
+
+
         customer = self.customer_service.find_customer_by_id(customer_id)
 
         products = []
@@ -97,12 +112,16 @@ class InvoiceService:
         self._invoices.append(invoice)
         self._id_counter += 1
 
+        logging.log(logging.INFO, "Fatura Criada")
+
         return invoice
 
     def list_invoices(self):
         """
         Returns the list of stored invoices.
         """
+        logging.log(logging.INFO, "Listar Faturas")
+
         return self._invoices
 
     def find_invoice_by_id(self, invoice_id: int):
@@ -111,9 +130,14 @@ class InvoiceService:
 
         Raises Exception() if invoice is not found.
         """
+
+        logging.log(logging.INFO, "Encontrar fatura pelo ID")
+
+
         for invoice in self._invoices:
             if invoice.id == invoice_id:
                 return invoice
+        logging.log(logging.INFO, "Fatura não encontrada!")
         raise Exception("Fatura não encontrada!")
 
     def find_invoice_by_customer(self, name: str = "", email: str = ""):
@@ -122,6 +146,9 @@ class InvoiceService:
 
         Returns an empty list otherwise.
         """
+
+        logging.log(logging.INFO, "Encontrar fatura pelo cliente")
+
         results = []
         for invoice in self._invoices:
             customer = invoice.customer
@@ -146,6 +173,9 @@ class InvoiceService:
 
         Returns an empty list otherwise.
         """
+
+        logging.log(logging.INFO, "Encontrar fatura pelo produto")
+
         results = []
         for invoice in self._invoices:
             for product in invoice.products:
@@ -167,7 +197,12 @@ class InvoiceService:
 
         Raises Exception() if invoice is not found.
         """
+
+        logging.log(logging.INFO, "Deletar Fatuara")
+
         for i in range(len(self._invoices)):
             if self._invoices[i].id == invoice_id:
                 return self._invoices.pop(i)
+        
+        logging.log(logging.INFO, "Fatura não encontrada!")
         raise Exception("Fatura não encontrada!")
