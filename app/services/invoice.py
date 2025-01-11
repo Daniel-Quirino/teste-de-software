@@ -1,8 +1,8 @@
+import logging
 from .product import *
 from .customer import *
 from datetime import datetime
 
-import logging
 
 class Invoice:
     """
@@ -23,7 +23,12 @@ class Invoice:
         self.total = total
         self.date = date
 
-        logging.basicConfig(filename='example.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+        logging.basicConfig(
+            filename="example.log",
+            level=logging.INFO,
+            format="%(asctime)s:%(levelname)s:%(message)s",
+        )
+
 
 class InvoiceService:
     """
@@ -59,9 +64,8 @@ class InvoiceService:
         file.close()
 
         self._id_counter += 1
-        
-        logging.log(logging.INFO, "Carregou as faturas ")
 
+        logging.log(logging.INFO, "Carregou as faturas ")
 
     def persist(self, path: str = "./app/data/invoices.jsonl"):
         """
@@ -77,7 +81,6 @@ class InvoiceService:
         file.close()
 
         logging.log(logging.INFO, "Armazenou as faturas")
-
 
     def _calculate_total(self, products: list[Product]):
         """
@@ -95,7 +98,6 @@ class InvoiceService:
         calculates the total cost and saves as an invoice.
         """
         logging.log(logging.INFO, "Criar fatura")
-
 
         customer = self.customer_service.find_customer_by_id(customer_id)
 
@@ -132,7 +134,6 @@ class InvoiceService:
         """
 
         logging.log(logging.INFO, "Encontrar fatura pelo ID")
-
 
         for invoice in self._invoices:
             if invoice.id == invoice_id:
@@ -203,6 +204,6 @@ class InvoiceService:
         for i in range(len(self._invoices)):
             if self._invoices[i].id == invoice_id:
                 return self._invoices.pop(i)
-        
+
         logging.log(logging.INFO, "Fatura não encontrada!")
         raise Exception("Fatura não encontrada!")

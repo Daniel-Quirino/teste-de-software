@@ -1,5 +1,4 @@
 import json
-
 import logging
 
 
@@ -13,7 +12,11 @@ class Product:
         self.name = name
         self.price = price
 
-        logging.basicConfig(filename='example.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+        logging.basicConfig(
+            filename="example.log",
+            level=logging.INFO,
+            format="%(asctime)s:%(levelname)s:%(message)s",
+        )
 
 
 class ProductService:
@@ -68,13 +71,14 @@ class ProductService:
 
         logging.log(logging.INFO, "Product - Adicionar Produto")
 
-
         if name == "":
             logging.log(logging.INFO, "Product - O nome do produto não pode ser vazio.")
             raise ValueError("O nome do produto não pode ser vazio.")
 
         if price <= 0:
-            logging.log(logging.INFO, "Product - O preço do produto deve ser maior que zero.")
+            logging.log(
+                logging.INFO, "Product - O preço do produto deve ser maior que zero."
+            )
             raise ValueError("O preço do produto deve ser maior que zero.")
 
         product = Product(self._id_counter, name, price)
@@ -134,17 +138,25 @@ class ProductService:
         if not isinstance(lower_bound, (float, int)) or not isinstance(
             upper_bound, (float, int)
         ):
-            logging.log(logging.INFO, "Product - Os limites de preço devem ser números (float ou int).")
+            logging.log(
+                logging.INFO,
+                "Product - Os limites de preço devem ser números (float ou int).",
+            )
             raise ValueError("Os limites de preço devem ser números (float ou int).")
 
         # Validation for negative values
         if lower_bound < 0 or upper_bound < 0:
-            logging.log(logging.INFO, "Product - Os limites de preço não podem ser negativos.")
+            logging.log(
+                logging.INFO, "Product - Os limites de preço não podem ser negativos."
+            )
             raise ValueError("Os limites de preço não podem ser negativos.")
 
         # Validation for logical order of bounds
         if lower_bound > upper_bound:
-            logging.log(logging.INFO, "Product - O limite inferior não pode ser maior que o limite superior.")
+            logging.log(
+                logging.INFO,
+                "Product - O limite inferior não pode ser maior que o limite superior.",
+            )
             raise ValueError(
                 "O limite inferior não pode ser maior que o limite superior."
             )

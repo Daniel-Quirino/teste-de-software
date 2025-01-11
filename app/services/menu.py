@@ -1,11 +1,15 @@
 import os
 import json
-
 import logging
+
 
 class MenuService:
     def __init__(self):
-        logging.basicConfig(filename='example.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+        logging.basicConfig(
+            filename="example.log",
+            level=logging.INFO,
+            format="%(asctime)s:%(levelname)s:%(message)s",
+        )
 
         self.headers = {
             "client": "\n=== Ações sobre Clientes ===\n1. Adicionar\n2. Remover\n3. Atualizar\n4. Listar\n5. Buscar por ID\n6. Buscar por nome\n7. Buscar por e-mail\n0. Voltar",
@@ -15,7 +19,6 @@ class MenuService:
         }
 
         logging.log(logging.INFO, "Menu - Inicializando")
-
 
     def clear_screen(self):
         logging.log(logging.INFO, "Menu - Limpar tela")
