@@ -52,7 +52,6 @@ class ProductService:
         """
         logging.log(logging.INFO, "Product - Armazenar produtos")
 
-
         file = open(path, "w")
         for product in self._products:
             file.write(
